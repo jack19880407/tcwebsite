@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>口部运动训练 - 上海小螺号能力开发中心</title>
+<link rel="icon" href="小螺号logo.svg" type="image/svg+xml">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #B8860B;
+  --warm-cream: #FBF8F3;
+  --card-bg: #FFFFFF;
+  --text-dark: #2D2A26;
+  --text-body: #5A554D;
+  --text-light: #8A847A;
+  --accent-coral: #E8846B;
+  --accent-sage: #7A9E7E;
+  --gold-gradient: linear-gradient(135deg, #D4A843 0%, #B8860B 50%, #8B6508 100%);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: var(--warm-cream);
+  color: var(--text-body);
+  min-height: 100vh;
+}
+
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 16px 0;
+  background: rgba(251,248,243,0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 20px rgba(45,42,38,0.06);
+}
+.nav-inner {
+  max-width: 900px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: var(--text-dark); }
+.nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
+.nav-back { display: flex; align-items: center; gap: 6px; padding: 8px 20px; border-radius: 50px; background: var(--gold-gradient); color: #fff; font-size: 13px; font-weight: 600; transition: all 0.3s; }
+.nav-back:hover { transform: translateY(-2px); }
+
+.container { max-width: 800px; margin: 0 auto; padding: 100px 24px 60px; }
+.page-header { text-align: center; margin-bottom: 40px; }
+.page-header h1 { font-size: 32px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+.page-header p { font-size: 16px; color: var(--text-light); }
+
+/* Exercise Display */
+.exercise-area {
+  background: linear-gradient(180deg, #ffecd2 0%, #fcb69f 100%);
+  border-radius: 24px; padding: 40px; margin-bottom: 30px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(252,182,159,0.3);
+}
+.exercise-icon { font-size: 100px; margin-bottom: 20px; }
+.exercise-name { font-size: 32px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; }
+.exercise-desc { font-size: 16px; color: var(--text-body); margin-bottom: 24px; line-height: 1.8; }
+.exercise-steps { background: rgba(255,255,255,0.7); border-radius: 16px; padding: 20px; text-align: left; }
+.exercise-steps h4 { font-size: 14px; color: var(--primary); margin-bottom: 12px; }
+.exercise-steps ol { padding-left: 20px; }
+.exercise-steps li { font-size: 14px; color: var(--text-body); margin-bottom: 8px; line-height: 1.6; }
+
+/* Timer */
+.timer-display {
+  background: rgba(0,0,0,0.8); color: #fff;
+  padding: 16px 40px; border-radius: 50px;
+  font-size: 36px; font-weight: 700;
+  font-family: 'Courier New', monospace;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+.timer-display.running { background: var(--accent-sage); }
+.timer-display.done { background: var(--primary); }
+
+/* Control Buttons */
+.controls { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+.ctrl-btn {
+  padding: 16px 32px; border-radius: 50px;
+  font-size: 16px; font-weight: 600; cursor: pointer;
+  border: none; transition: all 0.3s;
+}
+.ctrl-btn.start { background: var(--gold-gradient); color: #fff; box-shadow: 0 4px 16px rgba(184,134,11,0.3); }
+.ctrl-btn.start:hover { transform: translateY(-2px); }
+.ctrl-btn.next { background: var(--card-bg); color: var(--text-dark); border: 2px solid var(--primary); }
+.ctrl-btn.next:hover { background: rgba(184,134,11,0.1); }
+.ctrl-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* Progress */
+.progress-section { margin: 30px 0; }
+.progress-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-light); }
+.progress-bar { height: 8px; background: var(--warm-beige); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--gold-gradient); transition: width 0.3s; }
+
+/* Records */
+.records-section {
+  background: var(--card-bg); border-radius: 20px; padding: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.records-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.records-header h3 { font-size: 18px; color: var(--text-dark); }
+.clear-btn { padding: 8px 16px; border-radius: 8px; background: transparent; border: 1px solid var(--text-light); color: var(--text-light); font-size: 13px; cursor: pointer; }
+.clear-btn:hover { border-color: var(--accent-coral); color: var(--accent-coral); }
+.records-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.record-item { padding: 14px 16px; background: var(--warm-beige); border-radius: 12px; display: flex; align-items: center; gap: 12px; }
+.record-item .icon { font-size: 28px; }
+.record-item .info { flex: 1; }
+.record-item .name { font-weight: 600; color: var(--text-dark); font-size: 14px; }
+.record-item .duration { font-size: 12px; color: var(--text-light); }
+.record-item .date { font-size: 11px; color: var(--text-light); text-align: right; }
+.no-records { text-align: center; padding: 30px; color: var(--text-light); }
+.footer { text-align: center; padding: 30px 0; margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.06); }
+.footer p { font-size: 13px; color: var(--text-light); }
+
+@media (max-width: 600px) {
+  .records-list { grid-template-columns: 1fr; }
+  .exercise-icon { font-size: 80px; }
+  .exercise-name { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="小螺号logo.svg" alt="小螺号">上海小螺号</a>
+    <a href="常用工具.html" class="nav-back">← 返回</a>
+  </div>
+</header>
+
+<div class="container">
+  <div class="page-header">
+    <h1>👅 口部运动训练</h1>
+    <p>跟着步骤练习口部运动动作</p>
+  </div>
+
+  <div class="exercise-area">
+    <div class="exercise-icon" id="exerciseIcon">👅</div>
+    <div class="exercise-name" id="exerciseName">唇部运动</div>
+    <div class="exercise-desc" id="exerciseDesc">锻炼嘴唇的灵活性，为发音做准备</div>
+    <div class="exercise-steps">
+      <h4>📋 练习步骤</h4>
+      <ol id="exerciseSteps">
+        <li>双唇紧闭，保持3秒</li>
+        <li>慢慢张开嘴巴，保持2秒</li>
+        <li>重复10次</li>
+      </ol>
+    </div>
+  </div>
+
+  <div style="text-align: center;">
+    <div class="timer-display" id="timerDisplay">00:00</div>
+  </div>
+
+  <div class="controls">
+    <button class="ctrl-btn start" id="startBtn" onclick="startExercise()">▶️ 开始</button>
+    <button class="ctrl-btn next" id="nextBtn" onclick="nextExercise()">下一组 →</button>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-label">
+      <span>今日进度</span>
+      <span id="progressText">0 / 8 组</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 0%"></div></div>
+  </div>
+
+  <div class="records-section">
+    <div class="records-header">
+      <h3>📊 今日练习</h3>
+      <button class="clear-btn" onclick="clearRecords()">清空</button>
+    </div>
+    <div class="records-list" id="recordsList"><div class="no-records">暂无记录</div></div>
+  </div>
+</div>
+
+<footer class="footer"><p>© 2026 上海小螺号能力开发中心</p></footer>
+
+<script>
+const EXERCISES = [
+  { icon: '👅', name: '唇部运动', desc: '锻炼嘴唇的灵活性', steps: ['双唇紧闭，保持3秒', '慢慢张开嘴巴，保持2秒', '重复10次'] },
+  { icon: '👄', name: '舌头伸展', desc: '增强舌头活动范围', steps: ['舌头尽量伸出，保持5秒', '舌头向左嘴角伸展，保持3秒', '舌头向右嘴角伸展，保持3秒', '重复8次'] },
+  { icon: '😮', name: '嘴巴张开', desc: '提高下颌活动度', steps: ['慢慢张开嘴巴到最大', '保持5秒', '慢慢合上', '重复10次'] },
+  { icon: '😊', name: '微笑练习', desc: '锻炼面部肌肉', steps: ['用力微笑，保持3秒', '放松', '重复15次'] },
+  { icon: '🤪', name: '鬼脸练习', desc: '全面活动面部肌肉', steps: ['眉毛上抬，保持2秒', '眉毛下压，保持2秒', '做鬼脸，保持3秒', '重复8次'] },
+  { icon: '🔄', name: '咀嚼模拟', desc: '模拟咀嚼运动', steps: ['嘴巴模拟咀嚼动作', '顺时针10次', '逆时针10次'] },
+  { icon: '💪', name: '鼓腮练习', desc: '增强口腔压力', steps: ['鼓起左腮，保持3秒', '鼓起右腮，保持3秒', '鼓起双腮，保持5秒', '重复10次'] },
+  { icon: '🎯', name: '综合练习', desc: '综合所有口部动作', steps: ['伸舌-收舌5次', '张嘴-闭嘴5次', '鼓腮5次', '完成'] }
+];
+
+let currentIndex = 0;
+let isRunning = false;
+let timerSeconds = 0;
+let timerInterval = null;
+let records = JSON.parse(localStorage.getItem('oralMotorRecords') || '[]');
+let todayCount = parseInt(localStorage.getItem('oralMotorToday') || '0');
+let todayDate = localStorage.getItem('oralMotorDate') || '';
+
+const exerciseIcon = document.getElementById('exerciseIcon');
+const exerciseName = document.getElementById('exerciseName');
+const exerciseDesc = document.getElementById('exerciseDesc');
+const exerciseSteps = document.getElementById('exerciseSteps');
+const timerDisplay = document.getElementById('timerDisplay');
+const startBtn = document.getElementById('startBtn');
+const nextBtn = document.getElementById('nextBtn');
+const progressText = document.getElementById('progressText');
+const progressFill = document.getElementById('progressFill');
+const recordsList = document.getElementById('recordsList');
+
+function checkToday() {
+  const today = new Date().toDateString();
+  if (todayDate !== today) {
+    todayCount = 0;
+    todayDate = today;
+    localStorage.setItem('oralMotorDate', today);
+    localStorage.setItem('oralMotorToday', '0');
+  }
+}
+
+function updateExercise() {
+  const ex = EXERCISES[currentIndex];
+  exerciseIcon.textContent = ex.icon;
+  exerciseName.textContent = ex.name;
+  exerciseDesc.textContent = ex.desc;
+  exerciseSteps.innerHTML = ex.steps.map(s => `<li>${s}</li>`).join('');
+  timerDisplay.classList.remove('running', 'done');
+  timerDisplay.textContent = '00:00';
+  timerSeconds = 0;
+  startBtn.textContent = '▶️ 开始';
+  isRunning = false;
+}
+
+function updateProgress() {
+  progressText.textContent = `${todayCount} / ${EXERCISES.length} 组`;
+  progressFill.style.width = `${(todayCount / EXERCISES.length) * 100}%`;
+}
+
+function updateRecordsDisplay() {
+  if (records.length === 0) {
+    recordsList.innerHTML = '<div class="no-records">暂无记录</div>';
+    return;
+  }
+  recordsList.innerHTML = records.slice(0, 8).map(r => `
+    <div class="record-item">
+      <span class="icon">${r.icon}</span>
+      <div class="info">
+        <div class="name">${r.name}</div>
+        <div class="duration">${r.duration}</div>
+      </div>
+      <div class="date">${r.date}</div>
+    </div>
+  `).join('');
+}
+
+function saveRecord(name, duration, icon) {
+  const record = {
+    name, duration, icon,
+    date: new Date().toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+  };
+  records.unshift(record);
+  if (records.length > 20) records.pop();
+  localStorage.setItem('oralMotorRecords', JSON.stringify(records));
+  updateRecordsDisplay();
+}
+
+function clearRecords() {
+  if (confirm('确定清空所有记录？')) {
+    records = []; todayCount = 0;
+    localStorage.removeItem('oralMotorRecords');
+    localStorage.removeItem('oralMotorToday');
+    updateRecordsDisplay();
+    updateProgress();
+  }
+}
+
+function startExercise() {
+  if (isRunning) {
+    // Stop
+    clearInterval(timerInterval);
+    isRunning = false;
+    startBtn.textContent = '▶️ 继续';
+    timerDisplay.classList.remove('running');
+    
+    const ex = EXERCISES[currentIndex];
+    saveRecord(ex.name, formatTime(timerSeconds), ex.icon);
+  } else {
+    // Start
+    isRunning = true;
+    startBtn.textContent = '⏸️ 暂停';
+    timerDisplay.classList.add('running');
+    timerInterval = setInterval(() => {
+      timerSeconds++;
+      timerDisplay.textContent = formatTime(timerSeconds);
+    }, 1000);
+  }
+}
+
+function nextExercise() {
+  clearInterval(timerInterval);
+  
+  const ex = EXERCISES[currentIndex];
+  if (timerSeconds > 0) {
+    saveRecord(ex.name, formatTime(timerSeconds), ex.icon);
+    todayCount++;
+    localStorage.setItem('oralMotorToday', todayCount.toString());
+    updateProgress();
+  }
+  
+  currentIndex = (currentIndex + 1) % EXERCISES.length;
+  updateExercise();
+}
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+}
+
+checkToday();
+updateExercise();
+updateProgress();
+updateRecordsDisplay();
+</script>
+</body>
+</html>

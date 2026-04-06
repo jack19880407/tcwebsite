@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>音调训练 - 上海小螺号能力开发中心</title>
+<link rel="icon" href="小螺号logo.svg" type="image/svg+xml">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #B8860B;
+  --primary-light: #D4A843;
+  --warm-cream: #FBF8F3;
+  --card-bg: #FFFFFF;
+  --text-dark: #2D2A26;
+  --text-body: #5A554D;
+  --text-light: #8A847A;
+  --accent-coral: #E8846B;
+  --accent-sage: #7A9E7E;
+  --gold-gradient: linear-gradient(135deg, #D4A843 0%, #B8860B 50%, #8B6508 100%);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: var(--warm-cream);
+  color: var(--text-body);
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 16px 0;
+  background: rgba(251,248,243,0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 20px rgba(45,42,38,0.06);
+}
+.nav-inner {
+  max-width: 900px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px; font-weight: 700;
+  font-size: 16px; color: var(--text-dark);
+}
+.nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
+.nav-back {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 20px; border-radius: 50px;
+  background: var(--gold-gradient); color: #fff;
+  font-size: 13px; font-weight: 600;
+  transition: all 0.3s;
+}
+.nav-back:hover { transform: translateY(-2px); }
+
+/* Container */
+.container {
+  max-width: 800px; margin: 0 auto; padding: 100px 24px 60px;
+}
+
+/* Header */
+.page-header { text-align: center; margin-bottom: 40px; }
+.page-header h1 { font-size: 32px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+.page-header p { font-size: 16px; color: var(--text-light); }
+
+/* Game Area */
+.game-area {
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  border-radius: 24px; overflow: hidden;
+  height: 300px; position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  margin-bottom: 30px;
+}
+
+.pitch-visualizer {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 100%;
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 20px;
+}
+
+.pitch-bar {
+  width: 120px;
+  background: linear-gradient(180deg, #ff6b6b 0%, #feca57 50%, #48dbfb 100%);
+  border-radius: 20px 20px 0 0;
+  transition: height 0.1s ease-out;
+  min-height: 10px;
+  box-shadow: 0 0 30px rgba(255,107,107,0.5);
+}
+
+.pitch-label {
+  position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,0.6); color: #fff;
+  padding: 8px 24px; border-radius: 50px;
+  font-size: 18px; font-weight: 600;
+  font-family: 'Courier New', monospace;
+}
+
+.pitch-target {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  height: 4px; background: #fff;
+  box-shadow: 0 0 10px rgba(255,255,255,0.8);
+}
+.pitch-target.low { bottom: 30%; }
+.pitch-target.mid { bottom: 50%; }
+.pitch-target.high { bottom: 70%; }
+
+.target-label {
+  position: absolute; right: 20px;
+  background: rgba(255,255,255,0.2);
+  padding: 4px 12px; border-radius: 8px;
+  font-size: 12px; color: #fff;
+}
+.target-label.low { bottom: 30%; transform: translateY(50%); }
+.target-label.mid { bottom: 50%; transform: translateY(50%); }
+.target-label.high { bottom: 70%; transform: translateY(50%); }
+
+/* Instructions */
+.instructions {
+  text-align: center; margin: 24px 0;
+  padding: 20px; background: var(--card-bg);
+  border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.instructions p { font-size: 18px; color: var(--text-body); }
+.status-icon { font-size: 32px; margin-bottom: 8px; }
+
+/* Mic Button */
+.mic-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px;
+  width: 100%; max-width: 280px; margin: 0 auto 30px;
+  padding: 18px 32px; border-radius: 50px;
+  background: var(--gold-gradient); color: #fff;
+  font-size: 18px; font-weight: 600;
+  border: none; cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 6px 24px rgba(184,134,11,0.3);
+}
+.mic-btn:hover { transform: translateY(-3px); }
+.mic-btn.listening { background: var(--accent-sage); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { box-shadow: 0 6px 24px rgba(122,158,126,0.3); } 50% { box-shadow: 0 6px 40px rgba(122,158,126,0.6); } }
+
+/* Records */
+.records-section {
+  background: var(--card-bg); border-radius: 20px;
+  padding: 28px; margin-top: 30px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.records-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.records-header h3 { font-size: 18px; color: var(--text-dark); }
+.clear-btn {
+  padding: 8px 16px; border-radius: 8px;
+  background: transparent; border: 1px solid var(--text-light);
+  color: var(--text-light); font-size: 13px; cursor: pointer;
+}
+.clear-btn:hover { border-color: var(--accent-coral); color: var(--accent-coral); }
+.records-list { display: flex; flex-direction: column; gap: 10px; }
+.record-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 18px; background: var(--warm-beige);
+  border-radius: 12px;
+}
+.record-item .rank { font-weight: 700; color: var(--primary); width: 30px; }
+.record-item .duration { font-size: 20px; font-weight: 700; color: var(--text-dark); }
+.record-item .date { font-size: 13px; color: var(--text-light); }
+.no-records { text-align: center; padding: 30px; color: var(--text-light); }
+
+/* Footer */
+.footer { text-align: center; padding: 30px 0; margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.06); }
+.footer p { font-size: 13px; color: var(--text-light); }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="小螺号logo.svg" alt="小螺号">上海小螺号
+    </a>
+    <a href="常用工具.html" class="nav-back">← 返回</a>
+  </div>
+</header>
+
+<div class="container">
+  <div class="page-header">
+    <h1>🎵 音调训练</h1>
+    <p>发出不同音高的声音，让音调条升高或降低！</p>
+  </div>
+
+  <div class="game-area">
+    <div class="pitch-target low"></div>
+    <div class="pitch-target mid"></div>
+    <div class="pitch-target high"></div>
+    <span class="target-label low">低</span>
+    <span class="target-label mid">中</span>
+    <span class="target-label high">高</span>
+    <div class="pitch-visualizer">
+      <div class="pitch-bar" id="pitchBar" style="height: 20%;"></div>
+    </div>
+    <div class="pitch-label" id="pitchLabel">-- Hz</div>
+  </div>
+
+  <div class="instructions">
+    <div class="status-icon" id="statusIcon">🎤</div>
+    <p id="statusText">点击按钮开始训练</p>
+  </div>
+
+  <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤 开始训练</button>
+
+  <div class="records-section">
+    <div class="records-header">
+      <h3>📊 练习记录</h3>
+      <button class="clear-btn" onclick="clearRecords()">清空</button>
+    </div>
+    <div class="records-list" id="recordsList">
+      <div class="no-records">暂无记录</div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer"><p>© 2026 上海小螺号能力开发中心</p></footer>
+
+<script>
+let audioContext = null;
+let analyser = null;
+let microphone = null;
+let isListening = false;
+let micPermissionGranted = false;
+let records = JSON.parse(localStorage.getItem('pitchRecords') || '[]');
+
+const pitchBar = document.getElementById('pitchBar');
+const pitchLabel = document.getElementById('pitchLabel');
+const micBtnEl = document.getElementById('micBtn');
+const statusIconEl = document.getElementById('statusIcon');
+const statusTextEl = document.getElementById('statusText');
+const recordsListEl = document.getElementById('recordsList');
+
+function updateRecordsDisplay() {
+  if (records.length === 0) {
+    recordsListEl.innerHTML = '<div class="no-records">暂无记录</div>';
+    return;
+  }
+  recordsListEl.innerHTML = records.map((r, i) => `
+    <div class="record-item">
+      <span class="rank">#${i+1}</span>
+      <span class="duration">${r.pitch} Hz</span>
+      <span class="date">${r.date}</span>
+    </div>
+  `).join('');
+}
+
+function saveRecord(pitch) {
+  const record = {
+    pitch: Math.round(pitch),
+    date: new Date().toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+  };
+  records.unshift(record);
+  if (records.length > 10) records.pop();
+  localStorage.setItem('pitchRecords', JSON.stringify(records));
+  updateRecordsDisplay();
+}
+
+function clearRecords() {
+  if (confirm('确定清空所有记录？')) {
+    records = [];
+    localStorage.removeItem('pitchRecords');
+    updateRecordsDisplay();
+  }
+}
+
+function autoCorrelate(buf, sampleRate) {
+  let SIZE = buf.length;
+  let rms = 0;
+  for (let i = 0; i < SIZE; i++) {
+    let val = buf[i];
+    rms += val * val;
+  }
+  rms = Math.sqrt(rms / SIZE);
+  if (rms < 0.01) return -1;
+
+  let r1 = 0, r2 = SIZE - 1, thres = 0.2;
+  for (let i = 0; i < SIZE / 2; i++) {
+    if (Math.abs(buf[i]) < thres) { r1 = i; break; }
+  }
+  for (let i = 1; i < SIZE / 2; i++) {
+    if (Math.abs(buf[SIZE - i]) < thres) { r2 = SIZE - i; break; }
+  }
+  buf = buf.slice(r1, r2);
+  SIZE = buf.length;
+
+  let c = new Array(SIZE).fill(0);
+  for (let i = 0; i < SIZE; i++) {
+    for (let j = 0; j < SIZE - i; j++) {
+      c[i] += buf[j] * buf[j + i];
+    }
+  }
+
+  let d = 0;
+  while (c[d] > d) d++;
+  let maxval = -1, maxpos = -1;
+  for (let i = d; i < SIZE; i++) {
+    if (c[i] > maxval) {
+      maxval = c[i];
+      maxpos = i;
+    }
+  }
+  let T = maxpos;
+  return sampleRate / T;
+}
+
+function detectPitch() {
+  if (!isListening) return;
+
+  const bufferLength = analyser.fftSize;
+  const buffer = new Float32Array(bufferLength);
+  analyser.getFloatTimeDomainData(buffer);
+
+  const pitch = autoCorrelate(buffer, audioContext.sampleRate);
+
+  if (pitch > 80 && pitch < 1000) {
+    const height = Math.min(95, Math.max(5, ((pitch - 80) / 920) * 90 + 5));
+    pitchBar.style.height = height + '%';
+    pitchLabel.textContent = Math.round(pitch) + ' Hz';
+
+    if (Math.random() < 0.1) saveRecord(pitch);
+  } else {
+    pitchBar.style.height = '5%';
+    pitchLabel.textContent = '-- Hz';
+  }
+
+  if (isListening) requestAnimationFrame(detectPitch);
+}
+
+async function toggleMic() {
+  if (isListening) {
+    isListening = false;
+    if (audioContext) audioContext.suspend();
+    micBtnEl.textContent = '🎤 开始训练';
+    micBtnEl.classList.remove('listening');
+    return;
+  }
+
+  if (micPermissionGranted && audioContext) {
+    await audioContext.resume();
+    isListening = true;
+    micBtnEl.textContent = '⏹️ 停止';
+    micBtnEl.classList.add('listening');
+    detectPitch();
+    return;
+  }
+
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    microphone = audioContext.createMediaStreamSource(stream);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 4096;
+    microphone.connect(analyser);
+
+    micPermissionGranted = true;
+    isListening = true;
+    micBtnEl.textContent = '⏹️ 停止';
+    micBtnEl.classList.add('listening');
+    detectPitch();
+  } catch (err) {
+    alert('无法访问麦克风：' + err.message);
+  }
+}
+
+updateRecordsDisplay();
+</script>
+</body>
+</html>

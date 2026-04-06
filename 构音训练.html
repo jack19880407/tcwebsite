@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>构音训练 - 上海小螺号能力开发中心</title>
+<link rel="icon" href="小螺号logo.svg" type="image/svg+xml">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #B8860B;
+  --warm-cream: #FBF8F3;
+  --card-bg: #FFFFFF;
+  --text-dark: #2D2A26;
+  --text-body: #5A554D;
+  --text-light: #8A847A;
+  --accent-coral: #E8846B;
+  --accent-sage: #7A9E7E;
+  --gold-gradient: linear-gradient(135deg, #D4A843 0%, #B8860B 50%, #8B6508 100%);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: var(--warm-cream);
+  color: var(--text-body);
+  min-height: 100vh;
+}
+
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 16px 0;
+  background: rgba(251,248,243,0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 20px rgba(45,42,38,0.06);
+}
+.nav-inner {
+  max-width: 900px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: var(--text-dark); }
+.nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
+.nav-back { display: flex; align-items: center; gap: 6px; padding: 8px 20px; border-radius: 50px; background: var(--gold-gradient); color: #fff; font-size: 13px; font-weight: 600; transition: all 0.3s; }
+.nav-back:hover { transform: translateY(-2px); }
+
+.container { max-width: 800px; margin: 0 auto; padding: 100px 24px 60px; }
+.page-header { text-align: center; margin-bottom: 40px; }
+.page-header h1 { font-size: 32px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+.page-header p { font-size: 16px; color: var(--text-light); }
+
+/* Sound Cards */
+.sounds-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px;
+}
+.sound-card {
+  background: var(--card-bg); border-radius: 16px; padding: 24px 16px;
+  text-align: center; cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.sound-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.sound-card.active { border-color: var(--primary); background: rgba(184,134,11,0.08); }
+.sound-card .pinyin { font-size: 28px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.sound-card .chinese { font-size: 14px; color: var(--text-light); }
+.sound-card .icon { font-size: 40px; margin-bottom: 8px; }
+
+/* Target Display */
+.target-area {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24px; padding: 40px; margin-bottom: 30px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(102,126,234,0.3);
+}
+.target-sound { font-size: 80px; margin-bottom: 16px; }
+.target-text { font-size: 36px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.target-hint { font-size: 16px; color: rgba(255,255,255,0.8); }
+.next-btn { margin-top: 20px; }
+
+/* Instructions */
+.instructions {
+  text-align: center; margin: 24px 0;
+  padding: 20px; background: var(--card-bg);
+  border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.instructions p { font-size: 18px; color: var(--text-body); }
+.status-icon { font-size: 32px; margin-bottom: 8px; }
+
+/* Mic Button */
+.mic-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; width: 100%; max-width: 280px; margin: 0 auto 30px;
+  padding: 18px 32px; border-radius: 50px;
+  background: var(--gold-gradient); color: #fff;
+  font-size: 18px; font-weight: 600; border: none; cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 6px 24px rgba(184,134,11,0.3);
+}
+.mic-btn:hover { transform: translateY(-3px); }
+.mic-btn.listening { background: var(--accent-sage); }
+
+/* Score */
+.score-section {
+  display: flex; justify-content: center; gap: 40px; margin-bottom: 30px;
+}
+.score-item { text-align: center; }
+.score-item .num { font-size: 48px; font-weight: 800; color: var(--primary); }
+.score-item .label { font-size: 14px; color: var(--text-light); }
+.score-item .num.correct { color: var(--accent-sage); }
+
+/* Records */
+.records-section {
+  background: var(--card-bg); border-radius: 20px; padding: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.records-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.records-header h3 { font-size: 18px; color: var(--text-dark); }
+.clear-btn { padding: 8px 16px; border-radius: 8px; background: transparent; border: 1px solid var(--text-light); color: var(--text-light); font-size: 13px; cursor: pointer; }
+.clear-btn:hover { border-color: var(--accent-coral); color: var(--accent-coral); }
+.records-list { display: flex; flex-direction: column; gap: 8px; }
+.record-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--warm-beige); border-radius: 10px; font-size: 14px; }
+.record-item .result { font-weight: 600; }
+.record-item .result.pass { color: var(--accent-sage); }
+.record-item .result.fail { color: var(--accent-coral); }
+.record-item .date { color: var(--text-light); }
+.no-records { text-align: center; padding: 30px; color: var(--text-light); }
+.footer { text-align: center; padding: 30px 0; margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.06); }
+.footer p { font-size: 13px; color: var(--text-light); }
+
+@media (max-width: 600px) {
+  .sounds-grid { grid-template-columns: repeat(2, 1fr); }
+  .target-sound { font-size: 60px; }
+  .target-text { font-size: 28px; }
+}
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="小螺号logo.svg" alt="小螺号">上海小螺号</a>
+    <a href="常用工具.html" class="nav-back">← 返回</a>
+  </div>
+</header>
+
+<div class="container">
+  <div class="page-header">
+    <h1>🗣️ 构音训练</h1>
+    <p>选择要练习的音节，对着麦克风发音！</p>
+  </div>
+
+  <div class="sounds-grid">
+    <div class="sound-card" onclick="selectSound(this, 'ba')"><div class="icon">👄</div><div class="pinyin">bā</div><div class="chinese">爸</div></div>
+    <div class="sound-card" onclick="selectSound(this, 'ma')"><div class="icon">👄</div><div class="pinyin">mā</div><div class="chinese">妈</div></div>
+    <div class="sound-card" onclick="selectSound(this, 'ge')"><div class="icon">👄</div><div class="pinyin">gē</div><div class="chinese">哥</div></div>
+    <div class="sound-card" onclick="selectSound(this, 'shi')"><div class="icon">👄</div><div class="pinyin">shī</div><div class="chinese">师</div></div>
+    <div class="sound-card" onclick="selectSound(this, 'chi')"><div class="icon">👄</div><div class="pinyin">chī</div><div class="chinese">吃</div></div>
+    <div class="sound-card" onclick="selectSound(this, 'yu')"><div class="icon">👄</div><div class="pinyin">yú</div><div class="chinese">鱼</div></div>
+    <div class="sound-card" onclick="selectSound(this, 'si')"><div class="icon">👄</div><div class="pinyin">sī</div><div class="chinese">丝</div></div>
+    <div class="sound-card" onclick="selectSound(this, 'zi')"><div class="icon">👄</div><div class="pinyin">zī</div><div class="chinese">资</div></div>
+  </div>
+
+  <div class="target-area">
+    <div class="target-sound" id="targetIcon">👄</div>
+    <div class="target-text" id="targetText">请点击上方音节开始练习</div>
+    <div class="target-hint" id="targetHint">选择一个音节，然后按住麦克风按钮练习发音</div>
+    <button class="mic-btn next-btn" id="nextBtn" onclick="nextSound()" style="display:none;">下一题 →</button>
+  </div>
+
+  <div class="instructions">
+    <div class="status-icon" id="statusIcon">🎤</div>
+    <p id="statusText">选择音节后，按住麦克风按钮练习发音</p>
+  </div>
+
+  <button class="mic-btn" id="micBtn" onmousedown="startPractice()" onmouseup="stopPractice()" ontouchstart="startPractice()" ontouchend="stopPractice()">🎤 按住练习</button>
+
+  <div class="score-section">
+    <div class="score-item"><div class="num correct" id="correctCount">0</div><div class="label">正确</div></div>
+    <div class="score-item"><div class="num" id="totalCount">0</div><div class="label">练习次数</div></div>
+  </div>
+
+  <div class="records-section">
+    <div class="records-header">
+      <h3>📊 练习记录</h3>
+      <button class="clear-btn" onclick="clearRecords()">清空</button>
+    </div>
+    <div class="records-list" id="recordsList"><div class="no-records">暂无记录</div></div>
+  </div>
+</div>
+
+<footer class="footer"><p>© 2026 上海小螺号能力开发中心</p></footer>
+
+<script>
+const SOUNDS = {
+  ba: { pinyin: 'bā', chinese: '爸', freq: 200 },
+  ma: { pinyin: 'mā', chinese: '妈', freq: 300 },
+  ge: { pinyin: 'gē', chinese: '哥', freq: 250 },
+  shi: { pinyin: 'shī', chinese: '师', freq: 350 },
+  chi: { pinyin: 'chī', chinese: '吃', freq: 340 },
+  yu: { pinyin: 'yú', chinese: '鱼', freq: 400 },
+  si: { pinyin: 'sī', chinese: '丝', freq: 380 },
+  zi: { pinyin: 'zī', chinese: '资', freq: 360 }
+};
+
+let currentSound = null;
+let audioContext = null;
+let analyser = null;
+let microphone = null;
+let isPracticing = false;
+let records = JSON.parse(localStorage.getItem('articulationRecords') || '[]');
+let correctCount = 0;
+let totalCount = 0;
+
+const targetIcon = document.getElementById('targetIcon');
+const targetText = document.getElementById('targetText');
+const targetHint = document.getElementById('targetHint');
+const nextBtn = document.getElementById('nextBtn');
+const micBtn = document.getElementById('micBtn');
+const statusIcon = document.getElementById('statusIcon');
+const statusText = document.getElementById('statusText');
+const correctCountEl = document.getElementById('correctCount');
+const totalCountEl = document.getElementById('totalCount');
+const recordsListEl = document.getElementById('recordsList');
+
+function selectSound(el, key) {
+  document.querySelectorAll('.sound-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  currentSound = key;
+  const sound = SOUNDS[key];
+  targetIcon.textContent = '👄';
+  targetText.textContent = sound.pinyin + ' ' + sound.chinese;
+  targetHint.textContent = '按住麦克风按钮，发 "' + sound.pinyin + '" 的音';
+  nextBtn.style.display = 'inline-flex';
+  statusText.textContent = '按住麦克风按钮，练习发音';
+}
+
+function nextSound() {
+  const keys = Object.keys(SOUNDS);
+  let next;
+  do { next = keys[Math.floor(Math.random() * keys.length)]; } while (next === currentSound);
+  const el = document.querySelector(`[onclick*="'${next}'"]`);
+  if (el) selectSound(el, next);
+}
+
+function updateRecordsDisplay() {
+  if (records.length === 0) {
+    recordsListEl.innerHTML = '<div class="no-records">暂无记录</div>';
+    return;
+  }
+  recordsListEl.innerHTML = records.slice(0, 10).map((r, i) => `
+    <div class="record-item">
+      <span>${r.sound}</span>
+      <span class="result ${r.pass ? 'pass' : 'fail'}">${r.pass ? '✓ 正确' : '✗ 继续努力'}</span>
+      <span class="date">${r.date}</span>
+    </div>
+  `).join('');
+}
+
+function saveRecord(pass) {
+  const record = {
+    sound: SOUNDS[currentSound]?.pinyin || currentSound,
+    pass: pass,
+    date: new Date().toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+  };
+  records.unshift(record);
+  if (records.length > 20) records.pop();
+  localStorage.setItem('articulationRecords', JSON.stringify(records));
+  updateRecordsDisplay();
+}
+
+function clearRecords() {
+  if (confirm('确定清空所有记录？')) {
+    records = []; correctCount = 0; totalCount = 0;
+    localStorage.removeItem('articulationRecords');
+    correctCountEl.textContent = '0';
+    totalCountEl.textContent = '0';
+    updateRecordsDisplay();
+  }
+}
+
+async function initAudio() {
+  if (!audioContext) {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    microphone = audioContext.createMediaStreamSource(stream);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 1024;
+    microphone.connect(analyser);
+  }
+}
+
+function getVolume() {
+  const data = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(data);
+  return data.reduce((a, b) => a + b) / data.length;
+}
+
+function startPractice() {
+  if (!currentSound) { alert('请先选择一个音节'); return; }
+  isPracticing = true;
+  micBtn.classList.add('listening');
+  statusIcon.textContent = '🔊';
+  statusText.textContent = '正在发音...';
+  detectSound();
+}
+
+function detectSound() {
+  if (!isPracticing) return;
+  const vol = getVolume();
+  if (vol > 30) {
+    statusIcon.textContent = '🔊';
+    statusText.textContent = '很好！继续发音...';
+  }
+  if (isPracticing) requestAnimationFrame(detectSound);
+}
+
+function stopPractice() {
+  if (!isPracticing) return;
+  isPracticing = false;
+  micBtn.classList.remove('listening');
+  
+  totalCount++;
+  totalCountEl.textContent = totalCount;
+  
+  const vol = getVolume();
+  const passed = vol > 25 && currentSound;
+  
+  if (passed) {
+    correctCount++;
+    correctCountEl.textContent = correctCount;
+    statusIcon.textContent = '✅';
+    statusText.textContent = '发音正确！';
+  } else {
+    statusIcon.textContent = '🎤';
+    statusText.textContent = '请再试一次';
+  }
+  
+  saveRecord(passed);
+}
+
+updateRecordsDisplay();
+</script>
+</body>
+</html>

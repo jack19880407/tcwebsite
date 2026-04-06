@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>语言表达训练 - 上海小螺号能力开发中心</title>
+<link rel="icon" href="小螺号logo.svg" type="image/svg+xml">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #B8860B;
+  --warm-cream: #FBF8F3;
+  --card-bg: #FFFFFF;
+  --text-dark: #2D2A26;
+  --text-body: #5A554D;
+  --text-light: #8A847A;
+  --accent-coral: #E8846B;
+  --accent-sage: #7A9E7E;
+  --gold-gradient: linear-gradient(135deg, #D4A843 0%, #B8860B 50%, #8B6508 100%);
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: var(--warm-cream);
+  color: var(--text-body);
+  min-height: 100vh;
+}
+
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 16px 0;
+  background: rgba(251,248,243,0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 20px rgba(45,42,38,0.06);
+}
+.nav-inner {
+  max-width: 900px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: var(--text-dark); }
+.nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
+.nav-back { display: flex; align-items: center; gap: 6px; padding: 8px 20px; border-radius: 50px; background: var(--gold-gradient); color: #fff; font-size: 13px; font-weight: 600; transition: all 0.3s; }
+.nav-back:hover { transform: translateY(-2px); }
+
+.container { max-width: 800px; margin: 0 auto; padding: 100px 24px 60px; }
+.page-header { text-align: center; margin-bottom: 40px; }
+.page-header h1 { font-size: 32px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
+.page-header p { font-size: 16px; color: var(--text-light); }
+
+/* Level Selector */
+.level-selector { display: flex; justify-content: center; gap: 12px; margin-bottom: 30px; flex-wrap: wrap; }
+.level-btn {
+  padding: 12px 24px; border-radius: 50px;
+  background: var(--card-bg); border: 2px solid transparent;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.level-btn:hover { transform: translateY(-2px); }
+.level-btn.active { border-color: var(--primary); background: rgba(184,134,11,0.1); color: var(--primary); }
+
+/* Question Card */
+.question-area {
+  background: linear-gradient(180deg, #a8edea 0%, #fed6e3 100%);
+  border-radius: 24px; padding: 40px; margin-bottom: 30px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(168,237,234,0.3);
+}
+.question-icon { font-size: 60px; margin-bottom: 16px; }
+.question-type { font-size: 14px; color: var(--text-light); margin-bottom: 12px; }
+.question-text { font-size: 24px; font-weight: 700; color: var(--text-dark); line-height: 1.6; margin-bottom: 20px; }
+.question-hint { font-size: 14px; color: var(--text-body); background: rgba(255,255,255,0.7); padding: 12px 20px; border-radius: 12px; }
+
+/* Word Builder */
+.word-slots { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.word-slot {
+  width: 50px; height: 50px; border-radius: 10px;
+  background: #fff; border: 2px dashed var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; font-weight: 700; color: var(--text-dark);
+}
+.word-slot.filled { border-style: solid; background: rgba(184,134,11,0.1); }
+
+/* Word Options */
+.word-options { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.word-btn {
+  padding: 10px 20px; border-radius: 10px;
+  background: var(--card-bg); border: 2px solid transparent;
+  font-size: 18px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.word-btn:hover { transform: scale(1.05); border-color: var(--primary); }
+.word-btn.used { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+/* Controls */
+.controls { display: flex; justify-content: center; gap: 16px; margin-top: 24px; }
+.ctrl-btn {
+  padding: 14px 28px; border-radius: 50px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  border: none; transition: all 0.3s;
+}
+.ctrl-btn.check { background: var(--gold-gradient); color: #fff; box-shadow: 0 4px 16px rgba(184,134,11,0.3); }
+.ctrl-btn.check:hover { transform: translateY(-2px); }
+.ctrl-btn.next { background: var(--card-bg); color: var(--text-dark); border: 2px solid var(--primary); }
+.ctrl-btn.next:hover { background: rgba(184,134,11,0.1); }
+.ctrl-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Result */
+.result-display {
+  padding: 20px; border-radius: 16px; margin-top: 20px;
+  font-size: 18px; font-weight: 600; text-align: center;
+}
+.result-display.correct { background: rgba(122,158,126,0.2); color: var(--accent-sage); }
+.result-display.wrong { background: rgba(232,132,107,0.2); color: var(--accent-coral); }
+
+/* Score */
+.score-section { display: flex; justify-content: center; gap: 40px; margin: 30px 0; }
+.score-item { text-align: center; }
+.score-item .num { font-size: 42px; font-weight: 800; color: var(--primary); }
+.score-item .label { font-size: 14px; color: var(--text-light); }
+.score-item .num.correct { color: var(--accent-sage); }
+
+/* Records */
+.records-section { background: var(--card-bg); border-radius: 20px; padding: 28px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+.records-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.records-header h3 { font-size: 18px; color: var(--text-dark); }
+.clear-btn { padding: 8px 16px; border-radius: 8px; background: transparent; border: 1px solid var(--text-light); color: var(--text-light); font-size: 13px; cursor: pointer; }
+.clear-btn:hover { border-color: var(--accent-coral); color: var(--accent-coral); }
+.records-list { display: flex; flex-direction: column; gap: 8px; }
+.record-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--warm-beige); border-radius: 10px; }
+.record-item .text { font-size: 14px; color: var(--text-dark); flex: 1; }
+.record-item .result { font-size: 14px; font-weight: 600; }
+.record-item .result.pass { color: var(--accent-sage); }
+.record-item .result.fail { color: var(--accent-coral); }
+.no-records { text-align: center; padding: 30px; color: var(--text-light); }
+.footer { text-align: center; padding: 30px 0; margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.06); }
+.footer p { font-size: 13px; color: var(--text-light); }
+</style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><img src="小螺号logo.svg" alt="小螺号">上海小螺号</a>
+    <a href="常用工具.html" class="nav-back">← 返回</a>
+  </div>
+</header>
+
+<div class="container">
+  <div class="page-header">
+    <h1>💬 语言表达训练</h1>
+    <p>选择合适的词语，组成完整的句子！</p>
+  </div>
+
+  <div class="level-selector">
+    <button class="level-btn active" onclick="setLevel(1)">初级</button>
+    <button class="level-btn" onclick="setLevel(2)">中级</button>
+    <button class="level-btn" onclick="setLevel(3)">高级</button>
+  </div>
+
+  <div class="question-area">
+    <div class="question-icon" id="questionIcon">🏠</div>
+    <div class="question-type" id="questionType">看图说话</div>
+    <div class="question-text" id="questionText">小明的妈妈在___。</div>
+    <div class="question-hint" id="questionHint">提示：选择一个词语填入横线</div>
+    
+    <div class="word-slots" id="wordSlots"></div>
+    <div class="word-options" id="wordOptions"></div>
+    
+    <div class="result-display" id="resultDisplay" style="display:none;"></div>
+    
+    <div class="controls">
+      <button class="ctrl-btn check" id="checkBtn" onclick="checkAnswer()">✓ 检查答案</button>
+      <button class="ctrl-btn next" id="nextBtn" onclick="nextQuestion()">下一题 →</button>
+    </div>
+  </div>
+
+  <div class="score-section">
+    <div class="score-item"><div class="num correct" id="correctCount">0</div><div class="label">正确</div></div>
+    <div class="score-item"><div class="num" id="totalCount">0</div><div class="label">完成</div></div>
+  </div>
+
+  <div class="records-section">
+    <div class="records-header">
+      <h3>📊 练习记录</h3>
+      <button class="clear-btn" onclick="clearRecords()">清空</button>
+    </div>
+    <div class="records-list" id="recordsList"><div class="no-records">暂无记录</div></div>
+  </div>
+</div>
+
+<footer class="footer"><p>© 2026 上海小螺号能力开发中心</p></footer>
+
+<script>
+const QUESTIONS = {
+  1: [
+    { icon: '🏠', type: '看图说话', text: '小明的妈妈在___做饭。', options: ['厨房', '学校', '公园'], answer: 0 },
+    { icon: '🐕', type: '看图说话', text: '小狗在___跑。', options: ['路上', '水里', '天上'], answer: 0 },
+    { icon: '🍎', type: '看图说话', text: '小红在吃___。', options: ['苹果', '衣服', '鞋子'], answer: 0 },
+    { icon: '✏️', type: '看图说话', text: '哥哥在___写字。', options: ['桌子', '窗户', '电视'], answer: 0 },
+    { icon: '🌸', type: '看图说话', text: '花园里有许多___。', options: ['花', '鱼', '鸟'], answer: 0 },
+  ],
+  2: [
+    { icon: '🚗', type: '情景对话', text: '爸爸开车带我去___。', options: ['商店', '天空', '海里'], answer: 0 },
+    { icon: '👨‍👩‍👧', type: '家庭表达', text: '我和爸爸妈妈一起住在___。', options: ['家里', '学校', '医院'], answer: 0 },
+    { icon: '📚', type: '日常表达', text: '我喜欢在___看书。', options: ['书房', '厨房', '浴室'], answer: 0 },
+    { icon: '⚽', type: '活动表达', text: '下课了，我们在___踢足球。', options: ['操场', '教室', '图书馆'], answer: 0 },
+    { icon: '🌙', type: '时间表达', text: '晚上，我和妈妈一起看___。', options: ['月亮', '太阳', '白云'], answer: 0 },
+  ],
+  3: [
+    { icon: '🎂', type: '节日表达', text: '生日那天，我许了一个美好的___。', options: ['愿望', '作业', '烦恼'], answer: 0 },
+    { icon: '🌈', type: '自然表达', text: '雨停了，天空出现了一道美丽的___。', options: ['彩虹', '乌云', '狂风'], answer: 0 },
+    { icon: '👴‍👵', type: '家庭表达', text: '周末，我们全家一起去看望___。', options: ['爷爷奶奶', '老师', '同学'], answer: 0 },
+    { icon: '🤝', type: '社交表达', text: '遇到困难时，要学会向他人___。', options: ['求助', '打架', '逃避'], answer: 0 },
+    { icon: '🌱', type: '成长表达', text: '小树苗慢慢长大，终于长成了一棵___。', options: ['大树', '小草', '花朵'], answer: 0 },
+  ]
+};
+
+let currentLevel = 1;
+let currentQIndex = 0;
+let selectedAnswer = null;
+let records = JSON.parse(localStorage.getItem('languageRecords') || '[]');
+let correctCount = 0;
+let totalCount = 0;
+
+const questionIcon = document.getElementById('questionIcon');
+const questionType = document.getElementById('questionType');
+const questionText = document.getElementById('questionText');
+const questionHint = document.getElementById('questionHint');
+const wordSlots = document.getElementById('wordSlots');
+const wordOptions = document.getElementById('wordOptions');
+const resultDisplay = document.getElementById('resultDisplay');
+const checkBtn = document.getElementById('checkBtn');
+const nextBtn = document.getElementById('nextBtn');
+const correctCountEl = document.getElementById('correctCount');
+const totalCountEl = document.getElementById('totalCount');
+const recordsListEl = document.getElementById('recordsList');
+
+function setLevel(level) {
+  currentLevel = level;
+  currentQIndex = 0;
+  document.querySelectorAll('.level-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i === level - 1);
+  });
+  loadQuestion();
+}
+
+function shuffleArray(arr) {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function loadQuestion() {
+  const questions = QUESTIONS[currentLevel];
+  const q = questions[currentQIndex];
+  
+  questionIcon.textContent = q.icon;
+  questionType.textContent = q.type;
+  questionText.innerHTML = q.text.replace('___', '<span style="border-bottom:2px dashed var(--primary);padding:0 8px;">&nbsp;&nbsp;&nbsp;&nbsp;</span>');
+  
+  selectedAnswer = null;
+  resultDisplay.style.display = 'none';
+  checkBtn.disabled = false;
+  nextBtn.disabled = true;
+  
+  // Show all options
+  wordOptions.innerHTML = q.options.map((opt, i) => `
+    <button class="word-btn" onclick="selectOption(this, ${i})">${opt}</button>
+  `).join('');
+}
+
+function selectOption(btn, index) {
+  if (btn.classList.contains('used')) return;
+  
+  document.querySelectorAll('.word-btn').forEach(b => b.classList.remove('used'));
+  btn.classList.add('used');
+  selectedAnswer = index;
+}
+
+function checkAnswer() {
+  if (selectedAnswer === null) { alert('请先选择一个答案'); return; }
+  
+  const q = QUESTIONS[currentLevel][currentQIndex];
+  const correct = selectedAnswer === q.answer;
+  
+  totalCount++;
+  if (correct) correctCount++;
+  
+  correctCountEl.textContent = correctCount;
+  totalCountEl.textContent = totalCount;
+  
+  resultDisplay.style.display = 'block';
+  if (correct) {
+    resultDisplay.className = 'result-display correct';
+    resultDisplay.textContent = '🎉 回答正确！';
+  } else {
+    resultDisplay.className = 'result-display wrong';
+    resultDisplay.textContent = `❌ 答错了，正确答案是：${q.options[q.answer]}`;
+  }
+  
+  checkBtn.disabled = true;
+  nextBtn.disabled = false;
+  
+  saveRecord(q.text.replace('___', q.options[q.answer]), correct);
+}
+
+function nextQuestion() {
+  const questions = QUESTIONS[currentLevel];
+  currentQIndex = (currentQIndex + 1) % questions.length;
+  loadQuestion();
+}
+
+function updateRecordsDisplay() {
+  if (records.length === 0) {
+    recordsListEl.innerHTML = '<div class="no-records">暂无记录</div>';
+    return;
+  }
+  recordsListEl.innerHTML = records.slice(0, 10).map(r => `
+    <div class="record-item">
+      <span class="text">${r.text}</span>
+      <span class="result ${r.correct ? 'pass' : 'fail'}">${r.correct ? '✓' : '✗'}</span>
+    </div>
+  `).join('');
+}
+
+function saveRecord(text, correct) {
+  records.unshift({ text, correct });
+  if (records.length > 20) records.pop();
+  localStorage.setItem('languageRecords', JSON.stringify(records));
+  updateRecordsDisplay();
+}
+
+function clearRecords() {
+  if (confirm('确定清空所有记录？')) {
+    records = []; correctCount = 0; totalCount = 0;
+    localStorage.removeItem('languageRecords');
+    correctCountEl.textContent = '0';
+    totalCountEl.textContent = '0';
+    updateRecordsDisplay();
+  }
+}
+
+updateRecordsDisplay();
+loadQuestion();
+</script>
+</body>
+</html>
