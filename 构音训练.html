@@ -7,339 +7,137 @@
 <link rel="icon" href="小螺号logo.svg" type="image/svg+xml">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
 :root {
-  --primary: #B8860B;
-  --warm-cream: #FBF8F3;
-  --card-bg: #FFFFFF;
-  --text-dark: #2D2A26;
-  --text-body: #5A554D;
-  --text-light: #8A847A;
-  --accent-coral: #E8846B;
-  --accent-sage: #7A9E7E;
+  --primary: #B8860B; --warm-cream: #FBF8F3; --card-bg: #FFFFFF;
+  --text-dark: #2D2A26; --text-body: #5A554D; --text-light: #8A847A;
+  --accent-coral: #E8846B; --accent-sage: #7A9E7E;
   --gold-gradient: linear-gradient(135deg, #D4A843 0%, #B8860B 50%, #8B6508 100%);
 }
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  background: var(--warm-cream);
-  color: var(--text-body);
-  min-height: 100vh;
-}
-
-.navbar {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-  padding: 16px 0;
-  background: rgba(251,248,243,0.95);
-  backdrop-filter: blur(20px);
-  box-shadow: 0 1px 20px rgba(45,42,38,0.06);
-}
-.nav-inner {
-  max-width: 900px; margin: 0 auto; padding: 0 24px;
-  display: flex; align-items: center; justify-content: space-between;
-}
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif; background: var(--warm-cream); color: var(--text-body); min-height: 100vh; }
+.navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 12px 24px; background: rgba(251,248,243,0.98); backdrop-filter: blur(20px); box-shadow: 0 1px 20px rgba(45,42,38,0.08); display: flex; align-items: center; justify-content: space-between; }
 .nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: var(--text-dark); }
 .nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
-.nav-back { display: flex; align-items: center; gap: 6px; padding: 8px 20px; border-radius: 50px; background: var(--gold-gradient); color: #fff; font-size: 13px; font-weight: 600; transition: all 0.3s; }
-.nav-back:hover { transform: translateY(-2px); }
-
-.container { max-width: 800px; margin: 0 auto; padding: 100px 24px 60px; }
-.page-header { text-align: center; margin-bottom: 40px; }
-.page-header h1 { font-size: 32px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
-.page-header p { font-size: 16px; color: var(--text-light); }
-
-/* Sound Cards */
-.sounds-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 30px;
-}
-.sound-card {
-  background: var(--card-bg); border-radius: 16px; padding: 24px 16px;
-  text-align: center; cursor: pointer;
-  border: 2px solid transparent;
-  transition: all 0.3s;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-}
-.sound-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-.sound-card.active { border-color: var(--primary); background: rgba(184,134,11,0.08); }
-.sound-card .pinyin { font-size: 28px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
-.sound-card .chinese { font-size: 14px; color: var(--text-light); }
-.sound-card .icon { font-size: 40px; margin-bottom: 8px; }
-
-/* Target Display */
-.target-area {
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24px; padding: 40px; margin-bottom: 30px;
-  text-align: center;
-  box-shadow: 0 8px 32px rgba(102,126,234,0.3);
-}
-.target-sound { font-size: 80px; margin-bottom: 16px; }
-.target-text { font-size: 36px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-.target-hint { font-size: 16px; color: rgba(255,255,255,0.8); }
-.next-btn { margin-top: 20px; }
-
-/* Instructions */
-.instructions {
-  text-align: center; margin: 24px 0;
-  padding: 20px; background: var(--card-bg);
-  border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-}
-.instructions p { font-size: 18px; color: var(--text-body); }
-.status-icon { font-size: 32px; margin-bottom: 8px; }
-
-/* Mic Button */
-.mic-btn {
-  display: flex; align-items: center; justify-content: center;
-  gap: 10px; width: 100%; max-width: 280px; margin: 0 auto 30px;
-  padding: 18px 32px; border-radius: 50px;
-  background: var(--gold-gradient); color: #fff;
-  font-size: 18px; font-weight: 600; border: none; cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 0 6px 24px rgba(184,134,11,0.3);
-}
-.mic-btn:hover { transform: translateY(-3px); }
-.mic-btn.listening { background: var(--accent-sage); }
-
-/* Score */
-.score-section {
-  display: flex; justify-content: center; gap: 40px; margin-bottom: 30px;
-}
-.score-item { text-align: center; }
-.score-item .num { font-size: 48px; font-weight: 800; color: var(--primary); }
-.score-item .label { font-size: 14px; color: var(--text-light); }
-.score-item .num.correct { color: var(--accent-sage); }
-
-/* Records */
-.records-section {
-  background: var(--card-bg); border-radius: 20px; padding: 28px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
-}
-.records-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.records-header h3 { font-size: 18px; color: var(--text-dark); }
-.clear-btn { padding: 8px 16px; border-radius: 8px; background: transparent; border: 1px solid var(--text-light); color: var(--text-light); font-size: 13px; cursor: pointer; }
-.clear-btn:hover { border-color: var(--accent-coral); color: var(--accent-coral); }
-.records-list { display: flex; flex-direction: column; gap: 8px; }
-.record-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--warm-beige); border-radius: 10px; font-size: 14px; }
-.record-item .result { font-weight: 600; }
-.record-item .result.pass { color: var(--accent-sage); }
-.record-item .result.fail { color: var(--accent-coral); }
-.record-item .date { color: var(--text-light); }
-.no-records { text-align: center; padding: 30px; color: var(--text-light); }
-.footer { text-align: center; padding: 30px 0; margin-top: 40px; border-top: 1px solid rgba(0,0,0,0.06); }
-.footer p { font-size: 13px; color: var(--text-light); }
-
-@media (max-width: 600px) {
-  .sounds-grid { grid-template-columns: repeat(2, 1fr); }
-  .target-sound { font-size: 60px; }
-  .target-text { font-size: 28px; }
-}
+.nav-back { padding: 8px 20px; border-radius: 50px; background: var(--gold-gradient); color: #fff; font-size: 13px; font-weight: 600; text-decoration: none; }
+.layout { display: flex; padding-top: 60px; min-height: 100vh; }
+.sidebar { width: 240px; background: var(--card-bg); border-right: 1px solid rgba(0,0,0,0.08); position: fixed; top: 60px; left: 0; bottom: 0; overflow-y: auto; padding: 16px 0; }
+.sidebar-section { margin-bottom: 8px; }
+.sidebar-title { padding: 8px 16px; font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 8px 16px; cursor: pointer; font-size: 14px; color: var(--text-body); transition: all 0.2s; border-left: 3px solid transparent; }
+.sidebar-item:hover { background: rgba(184,134,11,0.08); color: var(--primary); }
+.sidebar-item.active { background: rgba(184,134,11,0.12); color: var(--primary); border-left-color: var(--primary); font-weight: 600; }
+.sidebar-item .emoji { font-size: 18px; }
+.content { flex: 1; margin-left: 240px; padding: 24px; min-height: calc(100vh - 60px); }
+.content-header { margin-bottom: 24px; }
+.content-header h1 { font-size: 24px; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+.content-header .big-emoji { font-size: 42px; cursor: pointer; transition: transform 0.2s; }
+.content-header .big-emoji:hover { transform: scale(1.2); }
+.content-header p { color: var(--text-light); font-size: 14px; }
+.section { margin-bottom: 24px; }
+.section-title { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.section-title::before { content: ''; width: 3px; height: 14px; background: var(--gold-gradient); border-radius: 2px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 10px; }
+.card { background: var(--card-bg); border-radius: 10px; padding: 12px 8px; text-align: center; cursor: pointer; border: 1px solid rgba(0,0,0,0.06); transition: all 0.2s; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: var(--primary); }
+.card .emoji { font-size: 26px; margin-bottom: 6px; display: block; }
+.card .text { font-size: 14px; font-weight: 600; color: var(--text-dark); }
+.card .sub { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+.words-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.word-item { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: var(--card-bg); border-radius: 8px; cursor: pointer; border: 1px solid rgba(0,0,0,0.06); transition: all 0.2s; }
+.word-item:hover { background: rgba(184,134,11,0.1); border-color: var(--primary); }
+.word-item .emoji { font-size: 18px; }
+.word-item .text { font-size: 16px; font-weight: 600; color: var(--text-dark); }
+.word-item .pinyin { font-size: 11px; color: var(--text-light); }
+.sentences-list { display: flex; flex-direction: column; gap: 10px; }
+.sentence-item { padding: 12px 16px; background: var(--card-bg); border-radius: 10px; cursor: pointer; border-left: 3px solid var(--primary); transition: all 0.2s; }
+.sentence-item:hover { background: rgba(184,134,11,0.08); }
+.sentence-item .text { font-size: 15px; color: var(--text-dark); line-height: 1.6; }
+.poem-item { background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%); border-radius: 12px; padding: 20px; margin-bottom: 12px; cursor: pointer; }
+.poem-item .title { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px; }
+.poem-item .content { font-size: 16px; color: var(--text-dark); line-height: 1.9; text-align: center; }
+.poem-item .author { font-size: 12px; color: var(--text-light); margin-top: 10px; text-align: right; }
+.tongue-twister { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); border-radius: 12px; padding: 20px; margin-bottom: 12px; }
+.tongue-twister .title { font-size: 13px; font-weight: 700; color: var(--accent-coral); margin-bottom: 10px; }
+.tongue-twister .content { font-size: 16px; color: var(--text-dark); line-height: 1.9; text-align: center; }
+.tongue-twister .play-btn { display: inline-block; margin-top: 10px; padding: 6px 16px; background: var(--accent-coral); color: #fff; border-radius: 50px; font-size: 12px; cursor: pointer; }
+.play-all-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--gold-gradient); color: #fff; border-radius: 50px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; margin-bottom: 16px; transition: all 0.2s; }
+.play-all-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(184,134,11,0.3); }
+@media (max-width: 768px) { .sidebar { display: none; } .content { margin-left: 0; padding: 16px; } .cards-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); } }
 </style>
 </head>
 <body>
-
 <header class="navbar">
-  <div class="nav-inner">
-    <a href="index.html" class="nav-logo"><img src="小螺号logo.svg" alt="小螺号">上海小螺号</a>
-    <a href="常用工具.html" class="nav-back">← 返回</a>
-  </div>
+  <a href="index.html" class="nav-logo"><img src="小螺号logo.svg" alt="小螺号">上海小螺号</a>
+  <a href="常用工具.html" class="nav-back">← 返回</a>
 </header>
-
-<div class="container">
-  <div class="page-header">
-    <h1>🗣️ 构音训练</h1>
-    <p>选择要练习的音节，对着麦克风发音！</p>
-  </div>
-
-  <div class="sounds-grid">
-    <div class="sound-card" onclick="selectSound(this, 'ba')"><div class="icon">👄</div><div class="pinyin">bā</div><div class="chinese">爸</div></div>
-    <div class="sound-card" onclick="selectSound(this, 'ma')"><div class="icon">👄</div><div class="pinyin">mā</div><div class="chinese">妈</div></div>
-    <div class="sound-card" onclick="selectSound(this, 'ge')"><div class="icon">👄</div><div class="pinyin">gē</div><div class="chinese">哥</div></div>
-    <div class="sound-card" onclick="selectSound(this, 'shi')"><div class="icon">👄</div><div class="pinyin">shī</div><div class="chinese">师</div></div>
-    <div class="sound-card" onclick="selectSound(this, 'chi')"><div class="icon">👄</div><div class="pinyin">chī</div><div class="chinese">吃</div></div>
-    <div class="sound-card" onclick="selectSound(this, 'yu')"><div class="icon">👄</div><div class="pinyin">yú</div><div class="chinese">鱼</div></div>
-    <div class="sound-card" onclick="selectSound(this, 'si')"><div class="icon">👄</div><div class="pinyin">sī</div><div class="chinese">丝</div></div>
-    <div class="sound-card" onclick="selectSound(this, 'zi')"><div class="icon">👄</div><div class="pinyin">zī</div><div class="chinese">资</div></div>
-  </div>
-
-  <div class="target-area">
-    <div class="target-sound" id="targetIcon">👄</div>
-    <div class="target-text" id="targetText">请点击上方音节开始练习</div>
-    <div class="target-hint" id="targetHint">选择一个音节，然后按住麦克风按钮练习发音</div>
-    <button class="mic-btn next-btn" id="nextBtn" onclick="nextSound()" style="display:none;">下一题 →</button>
-  </div>
-
-  <div class="instructions">
-    <div class="status-icon" id="statusIcon">🎤</div>
-    <p id="statusText">选择音节后，按住麦克风按钮练习发音</p>
-  </div>
-
-  <button class="mic-btn" id="micBtn" onmousedown="startPractice()" onmouseup="stopPractice()" ontouchstart="startPractice()" ontouchend="stopPractice()">🎤 按住练习</button>
-
-  <div class="score-section">
-    <div class="score-item"><div class="num correct" id="correctCount">0</div><div class="label">正确</div></div>
-    <div class="score-item"><div class="num" id="totalCount">0</div><div class="label">练习次数</div></div>
-  </div>
-
-  <div class="records-section">
-    <div class="records-header">
-      <h3>📊 练习记录</h3>
-      <button class="clear-btn" onclick="clearRecords()">清空</button>
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">声母训练</div>
+      <div class="sidebar-item" onclick="showContent('b')"><span class="emoji">🐻</span>b</div>
+      <div class="sidebar-item" onclick="showContent('p')"><span class="emoji">🌸</span>p</div>
+      <div class="sidebar-item" onclick="showContent('m')"><span class="emoji">👄</span>m</div>
+      <div class="sidebar-item" onclick="showContent('f')"><span class="emoji">🔥</span>f</div>
+      <div class="sidebar-item" onclick="showContent('d')"><span class="emoji">🐉</span>d</div>
+      <div class="sidebar-item" onclick="showContent('t')"><span class="emoji">🌴</span>t</div>
+      <div class="sidebar-item" onclick="showContent('n')"><span class="emoji">🌙</span>n</div>
+      <div class="sidebar-item" onclick="showContent('l')"><span class="emoji">🌊</span>l</div>
+      <div class="sidebar-item" onclick="showContent('g')"><span class="emoji">🍐</span>g</div>
+      <div class="sidebar-item" onclick="showContent('k')"><span class="emoji">🌿</span>k</div>
+      <div class="sidebar-item" onclick="showContent('h')"><span class="emoji">🐒</span>h</div>
+      <div class="sidebar-item" onclick="showContent('j')"><span class="emoji">🐔</span>j</div>
+      <div class="sidebar-item" onclick="showContent('q')"><span class="emoji">🍉</span>q</div>
+      <div class="sidebar-item" onclick="showContent('x')"><span class="emoji">🦁</span>x</div>
+      <div class="sidebar-item" onclick="showContent('zh')"><span class="emoji">📖</span>zh</div>
+      <div class="sidebar-item" onclick="showContent('ch')"><span class="emoji">🍵</span>ch</div>
+      <div class="sidebar-item" onclick="showContent('sh')"><span class="emoji">🐍</span>sh</div>
+      <div class="sidebar-item" onclick="showContent('r')"><span class="emoji">🌺</span>r</div>
+      <div class="sidebar-item" onclick="showContent('z')"><span class="emoji">📝</span>z</div>
+      <div class="sidebar-item" onclick="showContent('c')"><span class="emoji">🎃</span>c</div>
+      <div class="sidebar-item" onclick="showContent('s')"><span class="emoji">🐟</span>s</div>
     </div>
-    <div class="records-list" id="recordsList"><div class="no-records">暂无记录</div></div>
-  </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">韵母训练</div>
+      <div class="sidebar-item" onclick="showVowel('single')"><span class="emoji">🔵</span>单韵母</div>
+      <div class="sidebar-item" onclick="showVowel('compound')"><span class="emoji">🟢</span>复韵母</div>
+    </div>
+  </nav>
+  <main class="content" id="contentArea">
+    <div style="text-align:center; padding: 60px 20px; color: var(--text-light);"><div style="font-size: 56px; margin-bottom: 16px;">👈</div><p style="font-size: 16px;">请从左侧选择声母或韵母开始训练</p></div>
+  </main>
 </div>
-
-<footer class="footer"><p>© 2026 上海小螺号能力开发中心</p></footer>
-
 <script>
-const SOUNDS = {
-  ba: { pinyin: 'bā', chinese: '爸', freq: 200 },
-  ma: { pinyin: 'mā', chinese: '妈', freq: 300 },
-  ge: { pinyin: 'gē', chinese: '哥', freq: 250 },
-  shi: { pinyin: 'shī', chinese: '师', freq: 350 },
-  chi: { pinyin: 'chī', chinese: '吃', freq: 340 },
-  yu: { pinyin: 'yú', chinese: '鱼', freq: 400 },
-  si: { pinyin: 'sī', chinese: '丝', freq: 380 },
-  zi: { pinyin: 'zī', chinese: '资', freq: 360 }
+const SHENGMU={
+  b:{name:'b',emoji:'🐻',words:[{char:'爸',emoji:'👨',pinyin:'bà'},{char:'八',emoji:'8️⃣',pinyin:'bā'},{char:'吧',emoji:'🍺',pinyin:'ba'},{char:'白',emoji:'⚪',pinyin:'bái'},{char:'班',emoji:'👥',pinyin:'bān'},{char:'半',emoji:'➗',pinyin:'bàn'},{char:'包',emoji:'👝',pinyin:'bāo'},{char:'保',emoji:'🛡️',pinyin:'bǎo'},{char:'报',emoji:'📰',pinyin:'bào'},{char:'北',emoji:'⬆️',pinyin:'běi'}],twoWords:[{word:'爸爸',emoji:'👨',pinyin:'bà ba'},{word:'杯子',emoji:'🥤',pinyin:'bēi zi'},{word:'白色',emoji:'⚪',pinyin:'bái sè'},{word:'班级',emoji:'👥',pinyin:'bān jí'},{word:'包子',emoji:'🥟',pinyin:'bāo zi'},{word:'一半',emoji:'1️⃣',pinyin:'yī bàn'}],threeWords:[{word:'北京市',emoji:'🏙️',pinyin:'běi jīng shì'},{word:'半导体',emoji:'💡',pinyin:'bàn dǎo tǐ'}],sentences:['爸爸在上班。','妈妈给我买了一个新书包。','小白兔喜欢吃白菜。','我们一起做游戏吧！'],poems:[{title:'登鹳雀楼',content:'白日依山尽\n黄河入海流\n欲穷千里目\n更上一层楼',author:'唐·王之涣'}],tongueTwisters:[{title:'b音练习',content:'八百标兵奔北坡，\n炮兵并排北边跑，\n炮兵怕把标兵碰，\n标兵怕碰炮兵炮。'}]},
+  p:{name:'p',emoji:'🌸',words:[{char:'怕',emoji:'😨',pinyin:'pà'},{char:'爬',emoji:'🐢',pinyin:'pá'},{char:'拍',emoji:'📷',pinyin:'pāi'},{char:'排',emoji:'🚪',pinyin:'pái'},{char:'盘',emoji:'🍽️',pinyin:'pán'},{char:'跑',emoji:'🏃',pinyin:'pǎo'},{char:'泡',emoji:'☕',pinyin:'pào'},{char:'配',emoji:'🍷',pinyin:'pèi'}],twoWords:[{word:'泡泡',emoji:'🫧',pinyin:'pào pào'},{word:'皮球',emoji:'⚽',pinyin:'pí qiú'},{word:'排队',emoji:'🚶',pinyin:'pái duì'},{word:'跑步',emoji:'🏃',pinyin:'pǎo bù'}],threeWords:[{word:'乒乓球',emoji:'🏓',pinyin:'pīng pāng qiú'}],sentences:['小朋友在公园里跑步。','妈妈给我买了一个皮球。','天上飘着白云。','我们是好朋友！'],poems:[{title:'江雪',content:'千山鸟飞绝\n万径人踪灭\n孤舟蓑笠翁\n独钓寒江雪',author:'唐·柳宗元'}],tongueTwisters:[{title:'p音练习',content:'小皮球，圆又圆，\n拍一拍，跳一跳，\n拍得轻，跳得低，\n拍得重，跳得高。'}]},
+  m:{name:'m',emoji:'👄',words:[{char:'妈',emoji:'👩',pinyin:'mā'},{char:'马',emoji:'🐴',pinyin:'mǎ'},{char:'猫',emoji:'🐱',pinyin:'māo'},{char:'帽',emoji:'🎩',pinyin:'mào'},{char:'忙',emoji:'😰',pinyin:'máng'},{char:'毛',emoji:'🧶',pinyin:'máo'},{char:'米',emoji:'🍚',pinyin:'mǐ'},{char:'面',emoji:'🍜',pinyin:'miàn'}],twoWords:[{word:'妈妈',emoji:'👩',pinyin:'mā ma'},{word:'小猫',emoji:'🐱',pinyin:'xiǎo māo'},{word:'米饭',emoji:'🍚',pinyin:'mǐ fàn'},{word:'面包',emoji:'🍞',pinyin:'miàn bāo'}],threeWords:[{word:'小猫咪',emoji:'🐱',pinyin:'xiǎo mī mī'}],sentences:['妈妈在做饭。','小猫咪在睡觉。','我们每天都吃米饭。','妹妹会唱歌了！'],poems:[{title:'静夜思',content:'床前明月光\n疑是地上霜\n举头望明月\n低头思故乡',author:'唐·李白'}],tongueTwisters:[{title:'m音练习',content:'妈妈买马，\n马叫妈妈。'}]},
+  f:{name:'f',emoji:'🔥',words:[{char:'发',emoji:'💇',pinyin:'fā'},{char:'法',emoji:'⚖️',pinyin:'fǎ'},{char:'房',emoji:'🏠',pinyin:'fáng'},{char:'放',emoji:'🎯',pinyin:'fàng'},{char:'飞',emoji:'✈️',pinyin:'fēi'},{char:'风',emoji:'🌬️',pinyin:'fēng'}],twoWords:[{word:'发生',emoji:'💥',pinyin:'fā shēng'},{word:'飞机',emoji:'✈️',pinyin:'fēi jī'},{word:'房间',emoji:'🚪',pinyin:'fáng jiān'},{word:'衣服',emoji:'👔',pinyin:'yī fu'}],threeWords:[{word:'发动机',emoji:'⚙️',pinyin:'fā dòng jī'}],sentences:['飞机在天上飞。','妈妈在房间里做饭。','今天风很大。','放学后我们一起回家！'],poems:[{title:'风',content:'解落三秋叶\n能开二月花\n过江千尺浪\n入竹万竿斜',author:'唐·李峤'}],tongueTwisters:[{title:'f音练习',content:'风吹枫，枫动风，\n风吹枫动，风停枫静。'}]},
+  d:{name:'d',emoji:'🐉',words:[{char:'大',emoji:'📏',pinyin:'dà'},{char:'多',emoji:'🔢',pinyin:'duō'},{char:'对',emoji:'✅',pinyin:'duì'},{char:'地',emoji:'🌍',pinyin:'dì'},{char:'到',emoji:'➡️',pinyin:'dào'},{char:'东',emoji:'☀️',pinyin:'dōng'}],twoWords:[{word:'大家',emoji:'👥',pinyin:'dà jiā'},{word:'读书',emoji:'📚',pinyin:'dú shū'},{word:'电话',emoji:'📱',pinyin:'diàn huà'},{word:'地上',emoji:'🌍',pinyin:'dì shàng'}],threeWords:[{word:'大数据',emoji:'💻',pinyin:'dà shù jù'}],sentences:['大地回春了。','我有很多好朋友。','弟弟在读书。','我们一起做游戏吧！'],poems:[{title:'春晓',content:'春眠不觉晓\n处处闻啼鸟\n夜来风雨声\n花落知多少',author:'唐·孟浩然'}],tongueTwisters:[{title:'d音练习',content:'大刀砍土豆，\n土豆滚下坡。'}]},
+  t:{name:'t',emoji:'🌴',words:[{char:'他',emoji:'👨',pinyin:'tā'},{char:'她',emoji:'👩',pinyin:'tā'},{char:'太',emoji:'☀️',pinyin:'tài'},{char:'天',emoji:'🌤️',pinyin:'tiān'},{char:'跳',emoji:'🦘',pinyin:'tiào'},{char:'头',emoji:'👤',pinyin:'tóu'}],twoWords:[{word:'他们',emoji:'👥',pinyin:'tā men'},{word:'太阳',emoji:'☀️',pinyin:'tài yáng'},{word:'天气',emoji:'🌤️',pinyin:'tiān qì'},{word:'跳舞',emoji:'💃',pinyin:'tiào wǔ'}],threeWords:[{word:'天津市',emoji:'🏙️',pinyin:'tiān jīn shì'}],sentences:['他是一个好孩子。','今天天气很好。','我们一起跳舞吧！','小鸟在天上飞！'],poems:[{title:'咏鹅',content:'鹅鹅鹅\n曲项向天歌\n白毛浮绿水\n红掌拨清波',author:'唐·骆宾王'}],tongueTwisters:[{title:'t音练习',content:'天上跳跳虫，\n跳到地上叫。'}]},
+  n:{name:'n',emoji:'🌙',words:[{char:'那',emoji:'👉',pinyin:'nà'},{char:'奶',emoji:'🥛',pinyin:'nǎi'},{char:'男',emoji:'👨',pinyin:'nán'},{char:'你',emoji:'👉',pinyin:'nǐ'},{char:'年',emoji:'📅',pinyin:'nián'},{char:'鸟',emoji:'🐦',pinyin:'niǎo'}],twoWords:[{word:'那里',emoji:'👉',pinyin:'nà lǐ'},{word:'牛奶',emoji:'🥛',pinyin:'niú nǎi'},{word:'南方',emoji:'☀️',pinyin:'nán fāng'},{word:'你们',emoji:'👥',pinyin:'nǐ men'}],threeWords:[{word:'小男孩',emoji:'👦',pinyin:'nán hái zi'}],sentences:['那里有很多花。','牛奶很好喝。','小鸟在树上唱歌。','你是我的好朋友！'],poems:[{title:'悯农',content:'锄禾日当午\n汗滴禾下土\n谁知盘中餐\n粒粒皆辛苦',author:'唐·李绅'}],tongueTwisters:[{title:'n音练习',content:'牛牛要吃柳树叶，\n柳树叶，牛牛吃。'}]},
+  l:{name:'l',emoji:'🌊',words:[{char:'拉',emoji:'🖐️',pinyin:'lā'},{char:'来',emoji:'➡️',pinyin:'lái'},{char:'老',emoji:'👴',pinyin:'lǎo'},{char:'乐',emoji:'😊',pinyin:'lè'},{char:'了',emoji:'✅',pinyin:'le'},{char:'梨',emoji:'🍐',pinyin:'lí'}],twoWords:[{word:'来到',emoji:'🏃',pinyin:'lái dào'},{word:'老师',emoji:'👨‍🏫',pinyin:'lǎo shī'},{word:'快乐',emoji:'😊',pinyin:'kuài lè'},{word:'里面',emoji:'🏠',pinyin:'lǐ miàn'}],threeWords:[{word:'老年人',emoji:'👴',pinyin:'lǎo nián rén'}],sentences:['老师教我们读书。','我每天都很快乐。','小鸟在天空飞来飞去。','你来帮帮我吧！'],poems:[{title:'望庐山瀑布',content:'日照香炉生紫烟\n遥看瀑布挂前川\n飞流直下三千尺\n疑是银河落九天',author:'唐·李白'}],tongueTwisters:[{title:'l音练习',content:'六十六岁刘老六，\n推着六十六个大石榴。'}]},
+  g:{name:'g',emoji:'🍐',words:[{char:'哥',emoji:'👨',pinyin:'gē'},{char:'歌',emoji:'🎤',pinyin:'gē'},{char:'个',emoji:'1️⃣',pinyin:'gè'},{char:'给',emoji:'🎁',pinyin:'gěi'},{char:'工',emoji:'🏭',pinyin:'gōng'},{char:'瓜',emoji:'🍈',pinyin:'guā'}],twoWords:[{word:'哥哥',emoji:'👨',pinyin:'gē ge'},{word:'唱歌',emoji:'🎤',pinyin:'chàng gē'},{word:'一个',emoji:'1️⃣',pinyin:'yī gè'},{word:'西瓜',emoji:'🍉',pinyin:'xī guā'}],threeWords:[{word:'干什么',emoji:'❓',pinyin:'gàn shén me'}],sentences:['哥哥在唱歌。','妈妈给我买了一个西瓜。','我们一起做作业吧。','天黑了，路灯亮了！'],poems:[{title:'咏柳',content:'碧玉妆成一树高\n万条垂下绿丝绦\n不知细叶谁裁出\n二月春风似剪刀',author:'唐·贺知章'}],tongueTwisters:[{title:'g音练习',content:'哥哥钓鱼，\n钓到一条大鱼。'}]},
+  k:{name:'k',emoji:'🌿',words:[{char:'开',emoji:'🚪',pinyin:'kāi'},{char:'看',emoji:'👀',pinyin:'kàn'},{char:'可',emoji:'✅',pinyin:'kě'},{char:'渴',emoji:'🥤',pinyin:'kě'},{char:'科',emoji:'🔬',pinyin:'kē'},{char:'课',emoji:'📚',pinyin:'kè'}],twoWords:[{word:'开门',emoji:'🚪',pinyin:'kāi mén'},{word:'看见',emoji:'👀',pinyin:'kàn jiàn'},{word:'可以',emoji:'✅',pinyin:'kě yǐ'},{word:'科学',emoji:'🔬',pinyin:'kē xué'}],threeWords:[{word:'可口可乐',emoji:'🥤',pinyin:'kě kǒu kě lè'}],sentences:['门开了。','我看见一只小鸟。','我渴了，想喝水。','我们一起做游戏吧！'],poems:[{title:'古朗月行',content:'小时不识月\n呼作白玉盘\n又疑瑶台镜\n飞在青云端',author:'唐·李白'}],tongueTwisters:[{title:'k音练习',content:'磕磕碰碰，\n碰破砂锅，\n问问为什么。'}]},
+  h:{name:'h',emoji:'🐒',words:[{char:'喝',emoji:'🥤',pinyin:'hē'},{char:'河',emoji:'🏞️',pinyin:'hé'},{char:'和',emoji:'🤝',pinyin:'hé'},{char:'红',emoji:'🔴',pinyin:'hóng'},{char:'花',emoji:'🌸',pinyin:'huā'},{char:'画',emoji:'🖼️',pinyin:'huà'}],twoWords:[{word:'喝水',emoji:'🥤',pinyin:'hē shuǐ'},{word:'小河',emoji:'🏞️',pinyin:'xiǎo hé'},{word:'红色',emoji:'🔴',pinyin:'hóng sè'},{word:'花朵',emoji:'🌸',pinyin:'huā duǒ'}],threeWords:[{word:'小河马',emoji:'🦛',pinyin:'xiǎo hé mǎ'}],sentences:['小猴在河边喝水。','红红的花朵真漂亮。','我在画一幅画。','我们一起做游戏吧！'],poems:[{title:'绝句',content:'两个黄鹂鸣翠柳\n一行白鹭上青天\n窗含西岭千秋雪\n门泊东吴万里船',author:'唐·杜甫'}],tongueTwisters:[{title:'h音练习',content:'花开花，\n花红红。\n红红花，\n花嗡嗡。'}]},
+  j:{name:'j',emoji:'🐔',words:[{char:'鸡',emoji:'🐔',pinyin:'jī'},{char:'机',emoji:'✈️',pinyin:'jī'},{char:'几',emoji:'🔢',pinyin:'jǐ'},{char:'己',emoji:'🧍',pinyin:'jǐ'},{char:'季',emoji:'🍂',pinyin:'jì'},{char:'加',emoji:'➕',pinyin:'jiā'}],twoWords:[{word:'小鸡',emoji:'🐤',pinyin:'xiǎo jī'},{word:'飞机',emoji:'✈️',pinyin:'fēi jī'},{word:'自己',emoji:'🧍',pinyin:'zì jǐ'},{word:'回家',emoji:'🏠',pinyin:'huí jiā'}],threeWords:[{word:'机器人',emoji:'🤖',pinyin:'jī qì rén'}],sentences:['小鸡在草地上找虫子。','飞机在天上飞。','我自己的事情自己做。','我们一起回家吧！'],poems:[{title:'清明',content:'清明时节雨纷纷\n路上行人欲断魂\n借问酒家何处有\n牧童遥指杏花村',author:'唐·杜牧'}],tongueTwisters:[{title:'j音练习',content:'叽叽叽，\n小鸡叫，\n叫得大家哈哈笑。'}]},
+  q:{name:'q',emoji:'🍉',words:[{char:'七',emoji:'7️⃣',pinyin:'qī'},{char:'期',emoji:'📅',pinyin:'qī'},{char:'棋',emoji:'♟️',pinyin:'qí'},{char:'气',emoji:'💨',pinyin:'qì'},{char:'汽',emoji:'🚗',pinyin:'qì'},{char:'前',emoji:'➡️',pinyin:'qián'}],twoWords:[{word:'七个',emoji:'7️⃣',pinyin:'qī gè'},{word:'下棋',emoji:'♟️',pinyin:'xià qí'},{word:'生气',emoji:'😠',pinyin:'shēng qì'},{word:'汽车',emoji:'🚗',pinyin:'qì chē'}],threeWords:[{word:'期中考试',emoji:'📝',pinyin:'qī zhōng kǎo shì'}],sentences:['今天星期几？','我不生气。','汽车在马路上开。','前面有一棵大树！'],poems:[{title:'黄鹤楼送孟浩然之广陵',content:'故人西辞黄鹤楼\n烟花三月下扬州\n孤帆远影碧空尽\n唯见长江天际流',author:'唐·李白'}],tongueTwisters:[{title:'q音练习',content:'七加七，\n等于十四。\n真聪明！'}]},
+  x:{name:'x',emoji:'🦁',words:[{char:'西',emoji:'🌅',pinyin:'xī'},{char:'息',emoji:'💨',pinyin:'xī'},{char:'希',emoji:'✨',pinyin:'xī'},{char:'洗',emoji:'🧼',pinyin:'xǐ'},{char:'喜',emoji:'😊',pinyin:'xǐ'},{char:'下',emoji:'⬇️',pinyin:'xià'}],twoWords:[{word:'西瓜',emoji:'🍉',pinyin:'xī guā'},{word:'希望',emoji:'✨',pinyin:'xī wàng'},{word:'洗手',emoji:'🧼',pinyin:'xǐ shǒu'},{word:'喜欢',emoji:'❤️',pinyin:'xǐ huān'}],threeWords:[{word:'西红柿',emoji:'🍅',pinyin:'xī hóng shì'}],sentences:['我喜欢吃西瓜。','我们要勤洗手。','小鸟在天上飞来飞去。','夏天到了，天气很热！'],poems:[{title:'晓出净慈寺送林子方',content:'毕竟西湖六月中\n风光不与四时同\n接天莲叶无穷碧\n映日荷花别样红',author:'宋·杨万里'}],tongueTwisters:[{title:'x音练习',content:'稀奇稀奇真稀奇，\n蟋蟀踩死小公鸡。'}]},
+  zh:{name:'zh',emoji:'📖',words:[{char:'之',emoji:'📄',pinyin:'zhī'},{char:'知',emoji:'💡',pinyin:'zhī'},{char:'只',emoji:'1️⃣',pinyin:'zhī'},{char:'中',emoji:'⭕',pinyin:'zhōng'},{char:'钟',emoji:'⏰',pinyin:'zhōng'},{char:'走',emoji:'🚶',pinyin:'zǒu'}],twoWords:[{word:'知道',emoji:'💡',pinyin:'zhī dào'},{word:'中国',emoji:'🇨🇳',pinyin:'zhōng guó'},{word:'钟表',emoji:'⏰',pinyin:'zhōng biǎo'},{word:'走路',emoji:'🚶',pinyin:'zǒu lù'}],threeWords:[{word:'知道了',emoji:'✅',pinyin:'zhī dào le'}],sentences:['我知道这件事。','中国很大。','我们走路去学校。','我来帮你找一找！'],poems:[{title:'竹里馆',content:'独坐幽篁里\n弹琴复长啸\n深林人不知\n明月来相照',author:'唐·王维'}],tongueTwisters:[{title:'zh音练习',content:'朱姐姐，\n会织布，\n织出布来真好看。'}]},
+  ch:{name:'ch',emoji:'🍵',words:[{char:'吃',emoji:'🍽️',pinyin:'chī'},{char:'池',emoji:'🏊',pinyin:'chí'},{char:'尺',emoji:'📏',pinyin:'chǐ'},{char:'充',emoji:'⚡',pinyin:'chōng'},{char:'虫',emoji:'🐛',pinyin:'chóng'},{char:'出',emoji:'🚪',pinyin:'chū'}],twoWords:[{word:'吃饭',emoji:'🍽️',pinyin:'chī fàn'},{word:'水池',emoji:'🏊',pinyin:'shuǐ chí'},{word:'充电',emoji:'🔋',pinyin:'chōng diàn'},{word:'出去',emoji:'🚪',pinyin:'chū qù'}],threeWords:[{word:'游泳池',emoji:'🏊',pinyin:'yóu yǒng chí'}],sentences:['我吃饭了。','小鱼在水池里游来游去。','我们要坚持锻炼。','我们出去玩吧！'],poems:[{title:'出塞',content:'秦时明月汉时关\n万里长征人未还\n但使龙城飞将在\n不教胡马度阴山',author:'唐·王昌龄'}],tongueTwisters:[{title:'ch音练习',content:'吃葡萄不吐葡萄皮，\n不吃葡萄倒吐葡萄皮。'}]},
+  sh:{name:'sh',emoji:'🐍',words:[{char:'师',emoji:'👨‍🏫',pinyin:'shī'},{char:'失',emoji:'❌',pinyin:'shī'},{char:'十',emoji:'🔟',pinyin:'shí'},{char:'时',emoji:'🕐',pinyin:'shí'},{char:'石',emoji:'🪨',pinyin:'shí'},{char:'是',emoji:'✅',pinyin:'shì'}],twoWords:[{word:'老师',emoji:'👨‍🏫',pinyin:'lǎo shī'},{word:'时间',emoji:'⏰',pinyin:'shí jiān'},{word:'石头',emoji:'🪨',pinyin:'shí tou'},{word:'教室',emoji:'🏫',pinyin:'jiào shì'}],threeWords:[{word:'卫生间',emoji:'🚽',pinyin:'wèi shēng jiān'}],sentences:['老师教我们读书。','时间是宝贵的。','小鸟在树上唱歌。','这是我的好朋友！'],poems:[{title:'乌衣巷',content:'朱雀桥边野草花\n乌衣巷口夕阳斜\n旧时王谢堂前燕\n飞入寻常百姓家',author:'唐·刘禹锡'}],tongueTwisters:[{title:'sh音练习',content:'四十四个字，\n石狮子吃了四十四个涩柿子。'}]},
+  r:{name:'r',emoji:'🌺',words:[{char:'日',emoji:'☀️',pinyin:'rì'},{char:'热',emoji:'🔥',pinyin:'rè'},{char:'人',emoji:'👤',pinyin:'rén'},{char:'认',emoji:'✅',pinyin:'rèn'},{char:'让',emoji:'👉',pinyin:'ràng'},{char:'然',emoji:'✨',pinyin:'rán'}],twoWords:[{word:'日子',emoji:'📅',pinyin:'rì zi'},{word:'人们',emoji:'👥',pinyin:'rén men'},{word:'认识',emoji:'👋',pinyin:'rèn shi'},{word:'然后',emoji:'➡️',pinyin:'rán hòu'}],threeWords:[{word:'日本人',emoji:'👨‍🎤',pinyin:'rì běn rén'}],sentences:['今天天气很热。','我们要乐于助人。','我认识这个字。','然后我们一起做游戏！'],poems:[{title:'暮江吟',content:'一道残阳铺水中\n半江瑟瑟半江红\n可怜九月初三夜\n露似珍珠月似弓',author:'唐·白居易'}],tongueTwisters:[{title:'r音练习',content:'大热天，\n人人热，\n热得大家都喝水。'}]},
+  z:{name:'z',emoji:'📝',words:[{char:'字',emoji:'🔤',pinyin:'zì'},{char:'自',emoji:'🧍',pinyin:'zì'},{char:'在',emoji:'📍',pinyin:'zài'},{char:'再',emoji:'🔄',pinyin:'zài'},{char:'早',emoji:'🌅',pinyin:'zǎo'},{char:'做',emoji:'👨‍🍳',pinyin:'zuò'}],twoWords:[{word:'自己',emoji:'🧍',pinyin:'zì jǐ'},{word:'在这里',emoji:'📍',pinyin:'zài zhè lǐ'},{word:'早上',emoji:'🌅',pinyin:'zǎo shang'},{word:'做作业',emoji:'📝',pinyin:'zuò zuò yè'}],threeWords:[{word:'自来水',emoji:'🚰',pinyin:'zì lái shuǐ'}],sentences:['我在学校学习。','早上好！','我们一起做游戏吧。','请坐下！'],poems:[{title:'回乡偶书',content:'少小离家老大回\n乡音无改鬓毛衰\n儿童相见不相识\n笑问客从何处来',author:'唐·贺知章'}],tongueTwisters:[{title:'z音练习',content:'早上做早操，\n做操身体好。'}]},
+  c:{name:'c',emoji:'🎃',words:[{char:'次',emoji:'🔢',pinyin:'cì'},{char:'词',emoji:'📖',pinyin:'cí'},{char:'从',emoji:'➡️',pinyin:'cóng'},{char:'粗',emoji:'📏',pinyin:'cū'},{char:'醋',emoji:'🫗',pinyin:'cù'},{char:'村',emoji:'🏘️',pinyin:'cūn'}],twoWords:[{word:'一次',emoji:'1️⃣',pinyin:'yī cì'},{word:'从来',emoji:'➡️',pinyin:'cóng lái'},{word:'粗心',emoji:'😵',pinyin:'cū xīn'},{word:'村子',emoji:'🏘️',pinyin:'cūn zi'}],threeWords:[{word:'一次次',emoji:'🔢',pinyin:'yī cì yī cì'}],sentences:['我一次能跳十下。','我们要细心，不能粗心。','村子里的孩子都很可爱。','从小就要养成好习惯！'],poems:[{title:'村居',content:'草长莺飞二月天\n拂堤杨柳醉春烟\n儿童散学归来早\n忙趁东风放纸鸢',author:'清·高鼎'}],tongueTwisters:[{title:'c音练习',content:'粗菜粗菜，\n菜粗人勤快。'}]},
+  s:{name:'s',emoji:'🐟',words:[{char:'四',emoji:'4️⃣',pinyin:'sì'},{char:'思',emoji:'💭',pinyin:'sī'},{char:'丝',emoji:'🧶',pinyin:'sī'},{char:'死',emoji:'💀',pinyin:'sǐ'},{char:'寺',emoji:'🏯',pinyin:'sì'},{char:'诉',emoji:'💬',pinyin:'sù'}],twoWords:[{word:'四个',emoji:'4️⃣',pinyin:'sì gè'},{word:'思考',emoji:'🤔',pinyin:'sī kǎo'},{word:'司机',emoji:'🚗',pinyin:'sī jī'},{word:'告诉',emoji:'💬',pinyin:'gào sù'}],threeWords:[{word:'四十四',emoji:'4️⃣',pinyin:'sì shí sì'}],sentences:['我有四个好朋友。','我们要多思考。','我告诉老师这件事。','柠檬是酸的！'],poems:[{title:'枫桥夜泊',content:'月落乌啼霜满天\n江枫渔火对愁眠\n姑苏城外寒山寺\n夜半钟声到客船',author:'唐·张继'}],tongueTwisters:[{title:'s音练习',content:'三月三，\n小S去山上采草药，\n采了满满一背篓。'}]}
 };
-
-let currentSound = null;
-let audioContext = null;
-let analyser = null;
-let microphone = null;
-let isPracticing = false;
-let records = JSON.parse(localStorage.getItem('articulationRecords') || '[]');
-let correctCount = 0;
-let totalCount = 0;
-
-const targetIcon = document.getElementById('targetIcon');
-const targetText = document.getElementById('targetText');
-const targetHint = document.getElementById('targetHint');
-const nextBtn = document.getElementById('nextBtn');
-const micBtn = document.getElementById('micBtn');
-const statusIcon = document.getElementById('statusIcon');
-const statusText = document.getElementById('statusText');
-const correctCountEl = document.getElementById('correctCount');
-const totalCountEl = document.getElementById('totalCount');
-const recordsListEl = document.getElementById('recordsList');
-
-function selectSound(el, key) {
-  document.querySelectorAll('.sound-card').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  currentSound = key;
-  const sound = SOUNDS[key];
-  targetIcon.textContent = '👄';
-  targetText.textContent = sound.pinyin + ' ' + sound.chinese;
-  targetHint.textContent = '按住麦克风按钮，发 "' + sound.pinyin + '" 的音';
-  nextBtn.style.display = 'inline-flex';
-  statusText.textContent = '按住麦克风按钮，练习发音';
-}
-
-function nextSound() {
-  const keys = Object.keys(SOUNDS);
-  let next;
-  do { next = keys[Math.floor(Math.random() * keys.length)]; } while (next === currentSound);
-  const el = document.querySelector(`[onclick*="'${next}'"]`);
-  if (el) selectSound(el, next);
-}
-
-function updateRecordsDisplay() {
-  if (records.length === 0) {
-    recordsListEl.innerHTML = '<div class="no-records">暂无记录</div>';
-    return;
-  }
-  recordsListEl.innerHTML = records.slice(0, 10).map((r, i) => `
-    <div class="record-item">
-      <span>${r.sound}</span>
-      <span class="result ${r.pass ? 'pass' : 'fail'}">${r.pass ? '✓ 正确' : '✗ 继续努力'}</span>
-      <span class="date">${r.date}</span>
-    </div>
-  `).join('');
-}
-
-function saveRecord(pass) {
-  const record = {
-    sound: SOUNDS[currentSound]?.pinyin || currentSound,
-    pass: pass,
-    date: new Date().toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-  };
-  records.unshift(record);
-  if (records.length > 20) records.pop();
-  localStorage.setItem('articulationRecords', JSON.stringify(records));
-  updateRecordsDisplay();
-}
-
-function clearRecords() {
-  if (confirm('确定清空所有记录？')) {
-    records = []; correctCount = 0; totalCount = 0;
-    localStorage.removeItem('articulationRecords');
-    correctCountEl.textContent = '0';
-    totalCountEl.textContent = '0';
-    updateRecordsDisplay();
-  }
-}
-
-async function initAudio() {
-  if (!audioContext) {
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    microphone = audioContext.createMediaStreamSource(stream);
-    analyser = audioContext.createAnalyser();
-    analyser.fftSize = 1024;
-    microphone.connect(analyser);
-  }
-}
-
-function getVolume() {
-  const data = new Uint8Array(analyser.frequencyBinCount);
-  analyser.getByteFrequencyData(data);
-  return data.reduce((a, b) => a + b) / data.length;
-}
-
-function startPractice() {
-  if (!currentSound) { alert('请先选择一个音节'); return; }
-  isPracticing = true;
-  micBtn.classList.add('listening');
-  statusIcon.textContent = '🔊';
-  statusText.textContent = '正在发音...';
-  detectSound();
-}
-
-function detectSound() {
-  if (!isPracticing) return;
-  const vol = getVolume();
-  if (vol > 30) {
-    statusIcon.textContent = '🔊';
-    statusText.textContent = '很好！继续发音...';
-  }
-  if (isPracticing) requestAnimationFrame(detectSound);
-}
-
-function stopPractice() {
-  if (!isPracticing) return;
-  isPracticing = false;
-  micBtn.classList.remove('listening');
-  
-  totalCount++;
-  totalCountEl.textContent = totalCount;
-  
-  const vol = getVolume();
-  const passed = vol > 25 && currentSound;
-  
-  if (passed) {
-    correctCount++;
-    correctCountEl.textContent = correctCount;
-    statusIcon.textContent = '✅';
-    statusText.textContent = '发音正确！';
-  } else {
-    statusIcon.textContent = '🎤';
-    statusText.textContent = '请再试一次';
-  }
-  
-  saveRecord(passed);
-}
-
-updateRecordsDisplay();
+const YUNMU={
+  single:{name:'单韵母',emoji:'🔵',vowels:[{char:'啊',emoji:'😮',pinyin:'ā'},{char:'喔',emoji:'🐓',pinyin:'ō'},{char:'鹅',emoji:'🦢',pinyin:'é'},{char:'衣',emoji:'👚',pinyin:'ī'},{char:'乌',emoji:'🐦',pinyin:'ū'},{char:'鱼',emoji:'🐟',pinyin:'ǖ'},{char:'呀',emoji:'👶',pinyin:'ya'},{char:'蛙',emoji:'🐸',pinyin:'wa'},{char:'窝',emoji:'🥟',pinyin:'wo'},{char:'约',emoji:'📝',pinyin:'üe'}],words:[{word:'阿姨',emoji:'👩',pinyin:'ā yí'},{word:'山坡',emoji:'⛰️',pinyin:'shān pō'},{word:'小鹅',emoji:'🦢',pinyin:'xiǎo é'},{word:'衣服',emoji:'👔',pinyin:'yī fu'},{word:'乌黑',emoji:'⚫',pinyin:'wū hēi'},{word:'金鱼',emoji:'🐠',pinyin:'jīn yú'}]},
+  compound:{name:'复韵母',emoji:'🟢',vowels:[{char:'爱',emoji:'❤️',pinyin:'ai'},{char:'诶',emoji:'😮',pinyin:'ei'},{char:'奥',emoji:'🎉',pinyin:'ao'},{char:'欧',emoji:'🌍',pinyin:'ou'},{char:'安',emoji:'🙏',pinyin:'an'},{char:'恩',emoji:'💚',pinyin:'en'},{char:'昂',emoji:'🏔️',pinyin:'ang'},{char:'亨',emoji:'哼',pinyin:'eng'},{char:'英',emoji:'🌸',pinyin:'ing'},{char:'雍',emoji:'🪻',pinyin:'ong'}],words:[{word:'白菜',emoji:'🥬',pinyin:'bái cài'},{word:'妹妹',emoji:'👧',pinyin:'mèi mei'},{word:'毛草',emoji:'🌾',pinyin:'máo cǎo'},{word:'狗头',emoji:'🐕',pinyin:'gǒu tóu'},{word:'平安',emoji:'🙏',pinyin:'píng ān'},{word:'认真',emoji:'😀',pinyin:'rèn zhēn'}]}
+};
+function speak(text){if('speechSynthesis' in window){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='zh-CN';u.rate=0.8;speechSynthesis.speak(u);}}
+function showContent(key){document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));event.target.closest('.sidebar-item').classList.add('active');const d=SHENGMU[key];if(!d)return;let html=`<div class="content-header"><h1><span class="big-emoji" onclick="speak('${d.name}')">${d.emoji}</span>声母 <strong>${d.name}</strong> 练习</h1><p>点击emoji可以听发音</p></div><button class="play-all-btn" onclick="playAll('${key}')">🔊 听读所有单字</button><div class="section"><div class="section-title">单字</div><div class="cards-grid">${d.words.map(w=>`<div class="card" onclick="speak('${w.char}')"><span class="emoji">${w.emoji}</span><div class="text">${w.char}</div><div class="sub">${w.pinyin}</div></div>`).join('')}</div></div><div class="section"><div class="section-title">双音节词语</div><div class="words-list">${d.twoWords.map(w=>`<div class="word-item" onclick="speak('${w.word}')"><span class="emoji">${w.emoji}</span><span class="text">${w.word}</span><span class="pinyin">${w.pinyin}</span></div>`).join('')}</div></div>`;if(d.threeWords&&d.threeWords.length>0){html+=`<div class="section"><div class="section-title">三音节词语</div><div class="words-list">${d.threeWords.map(w=>`<div class="word-item" onclick="speak('${w.word}')"><span class="emoji">${w.emoji}</span><span class="text">${w.word}</span><span class="pinyin">${w.pinyin}</span></div>`).join('')}</div></div>`;}html+=`<div class="section"><div class="section-title">短句</div><div class="sentences-list">${d.sentences.map(s=>`<div class="sentence-item" onclick="speak('${s}')"><div class="text">${s}</div></div>`).join('')}</div></div>`;if(d.poems&&d.poems.length>0){html+=`<div class="section"><div class="section-title">诗词</div>${d.poems.map(p=>`<div class="poem-item" onclick="speak('${p.content.replace(/\n/g,'，')}')"><div class="title">${p.title}</div><div class="content">${p.content.replace(/\n/g,'<br>')}</div><div class="author">${p.author}</div></div>`).join('')}</div>`;}if(d.tongueTwisters&&d.tongueTwisters.length>0){html+=`<div class="section"><div class="section-title">绕口令</div>${d.tongueTwisters.map(t=>`<div class="tongue-twister"><div class="title">${t.title}</div><div class="content">${t.content.replace(/\n/g,'<br>')}</div><div class="play-btn" onclick="speak('${t.content.replace(/\n/g,'，')}')">🔊 点击听读</div></div>`).join('')}</div>`;}document.getElementById('contentArea').innerHTML=html;}
+function showVowel(type){document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));event.target.closest('.sidebar-item').classList.add('active');const d=YUNMU[type];if(!d)return;document.getElementById('contentArea').innerHTML=`<div class="content-header"><h1><span class="big-emoji" onclick="speak('${d.name}')">${d.emoji}</span>韵母 - ${d.name}</h1><p>点击emoji可以听发音</p></div><div class="section"><div class="section-title">韵母</div><div class="cards-grid">${d.vowels.map(v=>`<div class="card" onclick="speak('${v.char}')"><span class="emoji">${v.emoji}</span><div class="text">${v.char}</div><div class="sub">${v.pinyin}</div></div>`).join('')}</div></div><div class="section"><div class="section-title">双音节词语</div><div class="words-list">${d.words.map(w=>`<div class="word-item" onclick="speak('${w.word}')"><span class="emoji">${w.emoji}</span><span class="text">${w.word}</span><span class="pinyin">${w.pinyin}</span></div>`).join('')}</div></div>`;}
+function playAll(key){const d=SHENGMU[key];if(!d)return;d.words.forEach((w,i)=>{setTimeout(()=>speak(w.char),i*600);});}
+document.addEventListener('DOMContentLoaded',()=>{showContent('b');document.querySelector('.sidebar-item').classList.add('active');});
 </script>
 </body>
 </html>
