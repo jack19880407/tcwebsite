@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>常用工具 - 上海小螺号能力开发中心</title>
+<link rel="icon" href="小螺号logo.svg" type="image/svg+xml">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #B8860B;
+  --primary-light: #D4A843;
+  --primary-dark: #8B6508;
+  --warm-cream: #FBF8F3;
+  --warm-beige: #F3EDE4;
+  --card-bg: #FFFFFF;
+  --text-dark: #2D2A26;
+  --text-body: #5A554D;
+  --text-light: #8A847A;
+  --gold-gradient: linear-gradient(135deg, #D4A843 0%, #B8860B 50%, #8B6508 100%);
+  --shadow-md: 0 8px 30px rgba(45,42,38,0.08);
+  --shadow-lg: 0 20px 60px rgba(45,42,38,0.12);
+  --radius: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: var(--warm-cream);
+  color: var(--text-body);
+  line-height: 1.8;
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* Navbar */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 20px 0;
+  background: rgba(251,248,243,0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 20px rgba(45,42,38,0.06);
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 12px; font-weight: 700;
+  font-size: 18px; color: var(--text-dark);
+}
+.nav-logo img { width: 36px; height: 36px; border-radius: 10px; }
+.nav-back {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 24px; border-radius: 50px;
+  background: var(--gold-gradient); color: #fff;
+  font-size: 14px; font-weight: 600;
+  box-shadow: 0 4px 16px rgba(184,134,11,0.3);
+  transition: all 0.3s;
+}
+.nav-back:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(184,134,11,0.4); }
+
+/* Hero */
+.hero {
+  padding: 140px 0 80px;
+  text-align: center;
+  background: linear-gradient(160deg, var(--warm-cream) 0%, var(--warm-beige) 100%);
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 20px; border-radius: 50px;
+  background: rgba(184,134,11,0.08); border: 1px solid rgba(184,134,11,0.15);
+  font-size: 13px; color: var(--primary); font-weight: 600;
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-size: clamp(32px, 5vw, 48px); font-weight: 800;
+  color: var(--text-dark); line-height: 1.3;
+  letter-spacing: -0.5px; margin-bottom: 16px;
+}
+.hero h1 .highlight {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p {
+  font-size: 18px; color: var(--text-light); max-width: 600px; margin: 0 auto;
+}
+
+/* Tools Grid */
+.tools-section {
+  padding: 60px 0 100px;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.tool-card {
+  background: var(--card-bg); border-radius: var(--radius);
+  padding: 40px 32px;
+  text-align: center;
+  border: 1px solid rgba(184,134,11,0.08);
+  box-shadow: var(--shadow-md);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.tool-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--gold-gradient);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tool-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(184,134,11,0.2);
+}
+.tool-card:hover::before { opacity: 1; }
+
+.tool-icon {
+  width: 80px; height: 80px; border-radius: 20px;
+  background: linear-gradient(135deg, rgba(184,134,11,0.1) 0%, rgba(184,134,11,0.05) 100%);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 36px;
+  transition: transform 0.3s;
+}
+.tool-card:hover .tool-icon { transform: scale(1.1) rotate(5deg); }
+
+.tool-card h3 {
+  font-size: 20px; font-weight: 700; color: var(--text-dark);
+  margin-bottom: 8px;
+}
+.tool-card p {
+  font-size: 14px; color: var(--text-light); line-height: 1.7;
+}
+
+.tool-card.disabled {
+  cursor: default;
+}
+.tool-card.disabled:hover {
+  transform: none;
+  box-shadow: var(--shadow-md);
+}
+.tool-card.disabled:hover::before { opacity: 0; }
+.tool-card.disabled .tool-icon { filter: grayscale(0.5); opacity: 0.7; }
+
+.tool-badge {
+  display: inline-block;
+  padding: 4px 12px; border-radius: 50px;
+  background: rgba(184,134,11,0.1); color: var(--primary);
+  font-size: 11px; font-weight: 600;
+  margin-top: 12px;
+}
+
+/* Footer */
+.footer {
+  background: #1a1816; padding: 32px 0; text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.footer p { font-size: 13px; color: rgba(255,255,255,0.4); }
+
+/* Responsive */
+@media (max-width: 960px) {
+  .tools-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .tools-grid { grid-template-columns: 1fr; }
+  .tool-card { padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="小螺号logo.svg" alt="小螺号">
+      <span>上海小螺号能力开发中心</span>
+    </a>
+    <a href="index.html" class="nav-back">← 返回首页</a>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">常用工具</div>
+    <h1>康复训练<span class="highlight">专业工具</span></h1>
+    <p>科学系统的训练工具，帮助孩子高效提升各项言语语言能力</p>
+  </div>
+</section>
+
+<!-- Tools Grid -->
+<section class="tools-section">
+  <div class="container">
+    <div class="tools-grid">
+      
+      <!-- 呼吸训练 -->
+      <a class="tool-card" href="呼吸训练.html">
+        <div class="tool-icon">🌬️</div>
+        <h3>呼吸训练</h3>
+        <p>科学呼吸控制练习，提升气息支撑与发声协调能力</p>
+        <span class="tool-badge" style="background: var(--gold-gradient); color: #fff;">开始训练 →</span>
+      </a>
+
+      <!-- 音调训练 -->
+      <div class="tool-card disabled">
+        <div class="tool-icon">🎵</div>
+        <h3>音调训练</h3>
+        <p>音高变化练习，改善音调异常，提升语言韵律感</p>
+        <span class="tool-badge">即将上线</span>
+      </div>
+
+      <!-- 构音训练 -->
+      <div class="tool-card disabled">
+        <div class="tool-icon">🗣️</div>
+        <h3>构音训练</h3>
+        <p>发音器官运动练习，矫正发音错误，提升清晰度</p>
+        <span class="tool-badge">即将上线</span>
+      </div>
+
+      <!-- 口部运动训练 -->
+      <div class="tool-card disabled">
+        <div class="tool-icon">👅</div>
+        <h3>口部运动训练</h3>
+        <p>唇舌颌部运动练习，增强口肌力量与控制</p>
+        <span class="tool-badge">即将上线</span>
+      </div>
+
+      <!-- 语言表达训练 -->
+      <div class="tool-card disabled">
+        <div class="tool-icon">💬</div>
+        <h3>语言表达训练</h3>
+        <p>词汇语句组织练习，提升表达流畅性与逻辑性</p>
+        <span class="tool-badge">即将上线</span>
+      </div>
+
+      <!-- AAC辅助沟通 -->
+      <a class="tool-card" href="https://tc-aac.netlify.app" target="_blank">
+        <div class="tool-icon">📱</div>
+        <h3>AAC辅助沟通</h3>
+        <p>辅助替代沟通系统，帮助无法口语表达者进行有效沟通</p>
+        <span class="tool-badge" style="background: var(--gold-gradient); color: #fff;">立即使用 →</span>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>© 2026 上海小螺号能力开发中心 版权所有</p>
+</footer>
+
+</body>
+</html>

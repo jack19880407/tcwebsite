@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>呼吸训练 - 上海小螺号能力开发中心</title>
+<link rel="icon" href="小螺号logo.svg" type="image/svg+xml">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary: #B8860B;
+  --primary-light: #D4A843;
+  --warm-cream: #FBF8F3;
+  --warm-beige: #F3EDE4;
+  --card-bg: #FFFFFF;
+  --text-dark: #2D2A26;
+  --text-body: #5A554D;
+  --text-light: #8A847A;
+  --accent-coral: #E8846B;
+  --accent-sage: #7A9E7E;
+  --gold-gradient: linear-gradient(135deg, #D4A843 0%, #B8860B 50%, #8B6508 100%);
+  --road-color: #4A4A4A;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  background: var(--warm-cream);
+  color: var(--text-body);
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* Navbar */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  padding: 16px 0;
+  background: rgba(251,248,243,0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 1px 20px rgba(45,42,38,0.06);
+}
+.nav-inner {
+  max-width: 1000px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px; font-weight: 700;
+  font-size: 16px; color: var(--text-dark);
+}
+.nav-logo img { width: 32px; height: 32px; border-radius: 8px; }
+.nav-back {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 20px; border-radius: 50px;
+  background: var(--gold-gradient); color: #fff;
+  font-size: 13px; font-weight: 600;
+  transition: all 0.3s;
+}
+.nav-back:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(184,134,11,0.3); }
+
+/* Main Container */
+.container {
+  max-width: 900px; margin: 0 auto; padding: 100px 24px 60px;
+}
+
+/* Header */
+.page-header {
+  text-align: center; margin-bottom: 40px;
+}
+.page-header h1 {
+  font-size: 32px; font-weight: 800; color: var(--text-dark);
+  margin-bottom: 8px;
+}
+.page-header p {
+  font-size: 16px; color: var(--text-light);
+}
+
+/* Vehicle Selector */
+.vehicle-selector {
+  display: flex; justify-content: center; gap: 12px; margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+.vehicle-btn {
+  padding: 10px 20px; border-radius: 12px;
+  background: var(--card-bg); border: 2px solid transparent;
+  font-size: 24px; cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.vehicle-btn span { display: block; font-size: 12px; color: var(--text-light); margin-top: 2px; }
+.vehicle-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.vehicle-btn.active {
+  border-color: var(--primary);
+  background: rgba(184,134,11,0.08);
+}
+
+/* Game Area */
+.game-area {
+  background: linear-gradient(180deg, #87CEEB 0%, #98D8AA 70%, var(--road-color) 70%, #3A3A3A 100%);
+  border-radius: 24px; overflow: hidden;
+  height: 280px; position: relative;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+.road {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 70px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--road-color) 0px,
+    var(--road-color) 40px,
+    #FFD700 40px,
+    #FFD700 80px
+  );
+}
+.road::before {
+  content: '';
+  position: absolute; top: 50%; left: 0; right: 0; height: 4px;
+  background: repeating-linear-gradient(90deg, #FFF 0px, #FFF 30px, transparent 30px, transparent 60px);
+  transform: translateY(-50%);
+}
+
+.vehicle {
+  position: absolute; bottom: 75px; left: 60px;
+  font-size: 60px;
+  transition: left 0.1s linear;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+.clouds {
+  position: absolute; top: 20px;
+  font-size: 30px; opacity: 0.8;
+}
+.cloud-1 { left: 10%; animation: float 4s ease-in-out infinite; }
+.cloud-2 { left: 50%; animation: float 4s ease-in-out infinite 1s; }
+.cloud-3 { left: 80%; animation: float 4s ease-in-out infinite 2s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Timer Display */
+.timer-display {
+  position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,0.7); color: #fff;
+  padding: 12px 30px; border-radius: 50px;
+  font-size: 28px; font-weight: 700;
+  font-family: 'Courier New', monospace;
+  min-width: 140px; text-align: center;
+}
+.timer-display.active { background: var(--accent-sage); }
+.timer-display.stopped { background: var(--accent-coral); }
+
+/* Instructions */
+.instructions {
+  text-align: center; margin: 24px 0;
+  padding: 20px; background: var(--card-bg);
+  border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+}
+.instructions p {
+  font-size: 18px; color: var(--text-body);
+}
+.instructions .hint {
+  font-size: 14px; color: var(--text-light); margin-top: 8px;
+}
+.status-icon { font-size: 32px; margin-bottom: 8px; }
+
+/* Mic Button */
+.mic-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px;
+  width: 100%; max-width: 280px; margin: 0 auto 30px;
+  padding: 18px 32px; border-radius: 50px;
+  background: var(--gold-gradient); color: #fff;
+  font-size: 18px; font-weight: 600;
+  border: none; cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 6px 24px rgba(184,134,11,0.3);
+}
+.mic-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(184,134,11,0.4); }
+.mic-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.mic-btn.listening {
+  background: var(--accent-sage);
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 6px 24px rgba(122,158,126,0.3); }
+  50% { box-shadow: 0 6px 40px rgba(122,158,126,0.6); }
+}
+
+/* Records */
+.records-section {
+  background: var(--card-bg); border-radius: 20px;
+  padding: 28px; margin-top: 30px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.records-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px;
+}
+.records-header h3 { font-size: 18px; color: var(--text-dark); }
+.clear-btn {
+  padding: 8px 16px; border-radius: 8px;
+  background: transparent; border: 1px solid var(--text-light);
+  color: var(--text-light); font-size: 13px; cursor: pointer;
+  transition: all 0.3s;
+}
+.clear-btn:hover { border-color: var(--accent-coral); color: var(--accent-coral); }
+
+.records-list {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.record-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 18px; background: var(--warm-beige);
+  border-radius: 12px;
+}
+.record-item .rank {
+  font-weight: 700; color: var(--primary);
+  width: 30px;
+}
+.record-item .vehicle-icon { font-size: 24px; }
+.record-item .duration {
+  font-size: 22px; font-weight: 700; color: var(--text-dark);
+  font-family: 'Courier New', monospace;
+}
+.record-item .date {
+  font-size: 13px; color: var(--text-light);
+}
+.no-records {
+  text-align: center; padding: 40px;
+  color: var(--text-light); font-size: 15px;
+}
+
+/* Footer */
+.footer {
+  text-align: center; padding: 40px 0; margin-top: 40px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+.footer p { font-size: 13px; color: var(--text-light); }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .container { padding: 90px 16px 40px; }
+  .game-area { height: 220px; }
+  .vehicle { font-size: 48px; left: 40px; bottom: 70px; }
+  .timer-display { font-size: 22px; padding: 10px 24px; }
+  .vehicle-btn { padding: 8px 14px; font-size: 20px; }
+  .vehicle-btn span { font-size: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <img src="小螺号logo.svg" alt="小螺号">
+      <span>上海小螺号</span>
+    </a>
+    <a href="常用工具.html" class="nav-back">← 返回</a>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Header -->
+  <div class="page-header">
+    <h1>🌬️ 呼吸训练</h1>
+    <p>对着麦克风吹气或说话，让小车前进吧！</p>
+  </div>
+
+  <!-- Vehicle Selector -->
+  <div class="vehicle-selector">
+    <button class="vehicle-btn active" data-vehicle="car" onclick="selectVehicle(this)">
+      🚗
+      <span>小汽车</span>
+    </button>
+    <button class="vehicle-btn" data-vehicle="plane" onclick="selectVehicle(this)">
+      ✈️
+      <span>小飞机</span>
+    </button>
+    <button class="vehicle-btn" data-vehicle="dog" onclick="selectVehicle(this)">
+      🐕
+      <span>小狗</span>
+    </button>
+    <button class="vehicle-btn" data-vehicle="horse" onclick="selectVehicle(this)">
+      🐎
+      <span>小马</span>
+    </button>
+    <button class="vehicle-btn" data-vehicle="rocket" onclick="selectVehicle(this)">
+      🚀
+      <span>小火箭</span>
+    </button>
+  </div>
+
+  <!-- Game Area -->
+  <div class="game-area">
+    <div class="clouds cloud-1">☁️</div>
+    <div class="clouds cloud-2">☁️</div>
+    <div class="clouds cloud-3">☁️</div>
+    <div class="timer-display" id="timer">0.0秒</div>
+    <div class="vehicle" id="vehicle">🚗</div>
+    <div class="road"></div>
+  </div>
+
+  <!-- Instructions -->
+  <div class="instructions">
+    <div class="status-icon" id="statusIcon">🎤</div>
+    <p id="statusText">点击下方按钮开始训练</p>
+    <p class="hint" id="hintText">准备好后，点击按钮并对着麦克风吹气或说话</p>
+  </div>
+
+  <!-- Mic Button -->
+  <button class="mic-btn" id="micBtn" onclick="toggleMic()">
+    🎤 开始训练
+  </button>
+
+  <!-- Records -->
+  <div class="records-section">
+    <div class="records-header">
+      <h3>📊 最近练习记录</h3>
+      <button class="clear-btn" onclick="clearRecords()">清空记录</button>
+    </div>
+    <div class="records-list" id="recordsList">
+      <div class="no-records">暂无记录，开始你的第一次练习吧！</div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <p>© 2026 上海小螺号能力开发中心</p>
+</footer>
+
+<script>
+const VEHICLES = {
+  car: { icon: '🚗', name: '小汽车' },
+  plane: { icon: '✈️', name: '小飞机' },
+  dog: { icon: '🐕', name: '小狗' },
+  horse: { icon: '🐎', name: '小马' },
+  rocket: { icon: '🚀', name: '小火箭' }
+};
+
+let currentVehicle = 'car';
+let audioContext = null;
+let analyser = null;
+let microphone = null;
+let isListening = false;
+let isRunning = false;
+let startTime = 0;
+let animationId = null;
+let vehiclePosition = 60;
+let records = JSON.parse(localStorage.getItem('breathRecords') || '[]');
+let micPermissionGranted = false;
+let soundBuffer = 0;
+let silenceBuffer = 0;
+const SOUND_THRESHOLD = 25; // Volume threshold to detect sound
+const SOUND_BUFFER_MAX = 2; // Frames of sound needed to start
+const SILENCE_BUFFER_MAX = 3; // Frames of silence needed to stop (very responsive)
+
+// DOM Elements
+const timerEl = document.getElementById('timer');
+const vehicleEl = document.getElementById('vehicle');
+const micBtnEl = document.getElementById('micBtn');
+const statusIconEl = document.getElementById('statusIcon');
+const statusTextEl = document.getElementById('statusText');
+const hintTextEl = document.getElementById('hintText');
+const recordsListEl = document.getElementById('recordsList');
+
+function selectVehicle(btn) {
+  document.querySelectorAll('.vehicle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentVehicle = btn.dataset.vehicle;
+  vehicleEl.textContent = VEHICLES[currentVehicle].icon;
+  // All vehicles face right (head on right)
+  vehicleEl.style.transform = 'scaleX(-1)';
+}
+
+function updateRecordsDisplay() {
+  if (records.length === 0) {
+    recordsListEl.innerHTML = '<div class="no-records">暂无记录，开始你的第一次练习吧！</div>';
+    return;
+  }
+  
+  recordsListEl.innerHTML = records.map((r, i) => `
+    <div class="record-item">
+      <span class="rank">#${i + 1}</span>
+      <span class="vehicle-icon">${VEHICLES[r.vehicle]?.icon || '🚗'}</span>
+      <span class="duration">${r.duration}秒</span>
+      <span class="date">${r.date}</span>
+    </div>
+  `).join('');
+}
+
+function saveRecord(duration) {
+  const record = {
+    vehicle: currentVehicle,
+    duration: duration.toFixed(1),
+    date: new Date().toLocaleString('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+  };
+  
+  records.unshift(record);
+  if (records.length > 10) records.pop();
+  localStorage.setItem('breathRecords', JSON.stringify(records));
+  updateRecordsDisplay();
+}
+
+function clearRecords() {
+  if (confirm('确定要清空所有记录吗？')) {
+    records = [];
+    localStorage.removeItem('breathRecords');
+    updateRecordsDisplay();
+  }
+}
+
+function updateTimer() {
+  if (!isRunning) return;
+  
+  const elapsed = (Date.now() - startTime) / 1000;
+  
+  // Check 30 second limit
+  if (elapsed >= 30) {
+    stopTraining();
+    return;
+  }
+  
+  timerEl.textContent = elapsed.toFixed(1) + '秒';
+  
+  // Move vehicle (loop from right to left)
+  vehiclePosition = 60 + (elapsed * 60);
+  // Screen width is approximately 800px, so loop when position exceeds
+  if (vehiclePosition > 800) {
+    vehiclePosition = vehiclePosition % 800;
+  }
+  vehicleEl.style.left = vehiclePosition + 'px';
+  
+  animationId = requestAnimationFrame(updateTimer);
+}
+
+function startTraining() {
+  isRunning = true;
+  startTime = Date.now();
+  vehiclePosition = 60;
+  vehicleEl.style.left = vehiclePosition + 'px';
+  soundBuffer = 0; // Reset buffer when starting
+  
+  timerEl.classList.add('active');
+  timerEl.classList.remove('stopped');
+  statusIconEl.textContent = '🌬️';
+  statusTextEl.textContent = '正在训练中...';
+  hintTextEl.textContent = '继续保持！';
+  micBtnEl.classList.add('listening');
+  micBtnEl.textContent = '🔴 训练中...';
+  
+  updateTimer();
+}
+
+function stopTraining() {
+  if (!isRunning) return;
+  
+  isRunning = false;
+  cancelAnimationFrame(animationId);
+  
+  const duration = (Date.now() - startTime) / 1000;
+  
+  timerEl.classList.remove('active');
+  timerEl.classList.add('stopped');
+  statusIconEl.textContent = '✅';
+  statusTextEl.textContent = `完成！训练了 ${duration.toFixed(1)} 秒`;
+  hintTextEl.textContent = '点击按钮开始下一次训练';
+  micBtnEl.classList.remove('listening');
+  micBtnEl.textContent = '🎤 再次训练';
+  
+  if (duration >= 0.5) {
+    saveRecord(duration);
+  }
+  
+  // Auto reset after 2 seconds
+  setTimeout(() => {
+    timerEl.classList.remove('stopped');
+    timerEl.textContent = '0.0秒';
+    vehiclePosition = 60;
+    vehicleEl.style.left = vehiclePosition + 'px';
+    statusIconEl.textContent = '🎤';
+    statusTextEl.textContent = '点击下方按钮开始训练';
+    hintTextEl.textContent = '准备好后，点击按钮并对着麦克风吹气或说话';
+  }, 2000);
+}
+
+async function toggleMic() {
+  if (isListening) {
+    // Stop
+    stopListening();
+    return;
+  }
+  
+  // If permission already granted, just resume audio context
+  if (micPermissionGranted && audioContext && analyser) {
+    if (audioContext.state === 'suspended') {
+      await audioContext.resume();
+    }
+    isListening = true;
+    micBtnEl.textContent = '⏹️ 停止';
+    detectSound();
+    return;
+  }
+  
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    microphone = audioContext.createMediaStreamSource(stream);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    microphone.connect(analyser);
+    
+    micPermissionGranted = true;
+    isListening = true;
+    micBtnEl.textContent = '⏹️ 停止';
+    
+    detectSound();
+  } catch (err) {
+    alert('无法访问麦克风，请确保已授权麦克风权限。\n\n错误信息: ' + err.message);
+  }
+}
+
+function detectSound() {
+  if (!isListening) return;
+  
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(dataArray);
+  
+  // Calculate average volume
+  const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+  const isSound = average > SOUND_THRESHOLD;
+  
+  if (isSound) {
+    soundBuffer++;
+    silenceBuffer = 0;
+    // Need consistent sound for SOUND_BUFFER_MAX frames to start
+    if (soundBuffer >= SOUND_BUFFER_MAX && !isRunning) {
+      startTraining();
+    }
+  } else {
+    soundBuffer = 0;
+    // Increment silence buffer if training is running
+    if (isRunning) {
+      silenceBuffer++;
+      // Need consistent silence for SILENCE_BUFFER_MAX frames to stop
+      if (silenceBuffer >= SILENCE_BUFFER_MAX) {
+        stopTraining();
+      }
+    }
+  }
+  
+  if (isListening) requestAnimationFrame(detectSound);
+}
+
+function stopListening() {
+  isListening = false;
+  if (animationId) cancelAnimationFrame(animationId);
+  if (isRunning) stopTraining();
+  
+  // Reset buffers
+  soundBuffer = 0;
+  silenceBuffer = 0;
+  
+  // Keep microphone connection for next use, just suspend context
+  if (audioContext && audioContext.state === 'running') {
+    audioContext.suspend();
+  }
+  
+  micBtnEl.textContent = '🎤 开始训练';
+}
+
+// Initialize
+updateRecordsDisplay();
+vehicleEl.style.transform = 'scaleX(-1)'; // Car faces right
+</script>
+
+</body>
+</html>
